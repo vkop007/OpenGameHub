@@ -1,0 +1,14 @@
+{
+  "name": "Cyber 2048",
+  "description": "Merge energy cores on a 4x4 tactical grid to synthesize the 2048 singularity. Built with React + Vite.",
+  "version": "1.0.0",
+  "author": "OpenGameHub Puzzle Guild",
+  "engine": "none",
+  "framework": "react",
+  "buildAdapter": "vite",
+  "entry": "index.html",
+  "category": "puzzle",
+  "tags": ["puzzle", "react", "vite", "2048"],
+  "controls": ["Arrow Keys / WASD to Slide Cores", "R to Reset Board"],
+  "aspectRatio": "16:9"
+}

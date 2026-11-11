@@ -1,0 +1,72 @@
+name: Validate Contributed Games
+
+on:
+  pull_request:
+    paths:
+      - "games/**"
+      - "packages/game-discovery/**"
+      - "packages/game-adapters/**"
+      - "packages/game-builder/**"
+      - "packages/game-registry/**"
+      - "scripts/games-cli.ts"
+
+# Security: Read-only repository permissions, never use pull_request_target, and never expose deployment secrets
+permissions:
+  contents: read
+
+jobs:
+  validate-and-build-games:
+    name: Discover, Validate & Build Contributed Games
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: "true"
+      STRICT_GAME_BUILD: "true"
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install Workspace Dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Scan Contributed Games
+        run: pnpm games:scan
+
+      - name: Validate Game Manifests & Structure
+        run: pnpm games:validate
+
+      - name: Build All Games & Verify Output Integrity
+        run: pnpm games:test
+
+      - name: Write GitHub Workflow Summary
+        if: always()
+        run: |
+          echo "## 🎮 OpenGameHub Game Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f generated/games.json ]; then
+            node -e '
+              const fs = require("fs");
+              const reg = JSON.parse(fs.readFileSync("generated/games.json", "utf8"));
+              console.log("| Game ID | Name | Engine | Framework | Adapter | Version | Bundle Size | Status |");
+              console.log("|---|---|---|---|---|---|---|---|");
+              for (const g of reg.games) {
+                console.log(`| \`${g.id}\` | ${g.name} | ${g.engine} | ${g.framework} | ${g.buildAdapter} | v${g.version} | ${(g.bundleSizeBytes / 1024).toFixed(1)} KB | ✅ Published |`);
+              }
+              for (const f of reg.failedGames || []) {
+                console.log(`| \`${f.id}\` | ${f.name} | - | - | - | - | - | ❌ Failed: ${f.error} |`);
+              }
+            ' >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ \`generated/games.json\` was not produced." >> $GITHUB_STEP_SUMMARY
+          fi

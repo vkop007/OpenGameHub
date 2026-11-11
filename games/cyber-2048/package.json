@@ -1,0 +1,20 @@
+{
+  "name": "cyber-2048",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tactical 4x4 logic puzzle game built with React, Vite, and TypeScript.",
+  "author": "OpenGameHub Puzzle Guild",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^6.2.0"
+  }
+}

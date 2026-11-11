@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Space Shooter 3D</title>
+</head>
+<body style="margin:0;background:#020617;color:#f8fafc;font-family:system-ui,sans-serif;overflow:hidden;">
+  <div id="ui" style="position:fixed;top:14px;left:18px;z-index:10;display:flex;gap:20px;font-weight:700;font-size:14px;color:#38bdf8;">
+    <span>SCORE: <strong id="score">0</strong></span>
+    <span>SHIELD: <strong id="shield">100%</strong></span>
+    <span>ENGINE: <strong>THREE.JS 3D</strong></span>
+  </div>
+  <canvas id="viewport" width="800" height="450" style="width:100vw;height:100vh;display:block;"></canvas>
+  <script type="module" src="./src/main.ts"></script>
+</body>
+</html>

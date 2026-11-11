@@ -1,0 +1,19 @@
+{
+  "name": "space-shooter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "3D deep-space interceptor combat game powered by Three.js and Vite.",
+  "author": "OpenGameHub 3D Studio",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vite": "^6.2.0"
+  }
+}

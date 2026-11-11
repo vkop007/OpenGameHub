@@ -1,0 +1,14 @@
+{
+  "name": "Dungeon Crawler",
+  "description": "Explore ancient catacombs, collect glowing relics, and outsmart sentinel guardians in this 2D Phaser + Vite adventure.",
+  "version": "1.0.0",
+  "author": "OpenGameHub 2D Collective",
+  "engine": "phaser",
+  "framework": "vanilla",
+  "buildAdapter": "vite",
+  "entry": "index.html",
+  "category": "adventure",
+  "tags": ["2d", "phaser", "dungeon", "rpg"],
+  "controls": ["Arrow Keys / WASD to Move", "Collect Gold Relics", "Avoid Red Sentinels"],
+  "aspectRatio": "16:9"
+}

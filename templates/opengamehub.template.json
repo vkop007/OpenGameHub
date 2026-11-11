@@ -1,0 +1,14 @@
+{
+  "name": "Example Game Title",
+  "description": "A short description of your game and its objective.",
+  "version": "1.0.0",
+  "author": "Your Name or Studio",
+  "engine": "threejs",
+  "framework": "vanilla",
+  "buildAdapter": "vite",
+  "entry": "index.html",
+  "category": "action",
+  "tags": ["3d", "arcade"],
+  "controls": ["WASD to Move", "Mouse to Aim", "Space to Jump"],
+  "aspectRatio": "16:9"
+}

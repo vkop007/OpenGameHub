@@ -1,0 +1,43 @@
+name: Production Deployment Verification (Vercel Git Integration)
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify-production-release:
+    name: Verify Production Build Before Vercel Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout Main Branch
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Install Workspace Dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build Contributed Games & Next.js Application
+        # Note: Contributed game builds run without any Vercel or application secrets in the environment.
+        # Vercel Git Integration automatically deploys the main branch using the settings in vercel.json.
+        run: pnpm build
+
+      - name: Deployment Summary
+        run: |
+          echo "## 🚀 Production Release Verified" >> $GITHUB_STEP_SUMMARY
+          echo "Vercel Git Integration automatically deploys \`main\` using Root Directory \`apps/web\` and Build Command \`cd ../.. && pnpm build\`." >> $GITHUB_STEP_SUMMARY

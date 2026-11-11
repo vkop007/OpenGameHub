@@ -1,0 +1,14 @@
+{
+  "name": "Neon Breakout",
+  "description": "Fast-paced cyberpunk brick breaker built with pure HTML5 Canvas and vanilla JavaScript. Deflect the plasma sphere, chain combo multipliers, and clear all orbital sectors.",
+  "version": "1.0.0",
+  "author": "OpenGameHub Arcade Lab",
+  "engine": "canvas2d",
+  "framework": "vanilla",
+  "buildAdapter": "static",
+  "entry": "index.html",
+  "category": "arcade",
+  "tags": ["arcade", "breakout", "canvas2d", "retro"],
+  "controls": ["Left / Right Arrows", "A / D Keys", "Mouse Move", "Space to Launch"],
+  "aspectRatio": "16:9"
+}

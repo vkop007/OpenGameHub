@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+.next/
+out/
+.turbo/
+
+# Generated static games
+apps/web/public/_games/
+
+# Testing
+coverage/
+test-results/
+playwright-report/
+
+# Misc
+.DS_Store
+*.pem
+.env*
+!.env.example
+.vercel
