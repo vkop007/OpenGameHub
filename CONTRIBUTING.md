@@ -4,53 +4,147 @@ Welcome to **OpenGameHub**! Our core contribution rule is simple:
 
 > **ONE GAME = ONE FOLDER INSIDE `/games`.**
 
-You never need to modify the Next.js platform (`apps/web`), root `package.json`, shared `packages/*`, or GitHub workflows to contribute a game.
+The recommended workflow is AI-assisted and end to end. Give the prompt below to
+your coding agent from the repository or game-project directory. The agent should
+inspect the project, prepare the game, validate it, launch it, capture a gameplay
+screenshot, and prepare a reviewable pull request without asking you to perform
+routine terminal or Git steps.
 
----
+## Autonomous AI Contribution Prompt
 
-## 1. Quick Contribution Steps
+Copy the prompt between the fences into your coding agent:
 
-1. **Fork & Clone** the repository:
-   ```bash
-   git clone https://github.com/<your-username>/OpenGameHub.git
-   cd OpenGameHub
-   pnpm install
-   ```
-2. **Add Your Game Folder** inside `/games/<your-game-slug>/`:
-   - Slug must be lowercase alphanumeric with hyphens (`a-z0-9-`), 2–64 characters (e.g. `games/space-shooter/`).
-3. **Validate & Build Locally**:
-   ```bash
-   pnpm game:validate <your-game-slug>
-   pnpm game:build <your-game-slug>
-   ```
-4. **Test in the Universal Game Player**:
-   ```bash
-   pnpm dev
-   ```
-   Open `http://localhost:3000/play/<your-game-slug>` and verify controls, assets, restart, and fullscreen.
-5. **Submit a Pull Request**:
-   Push your branch and open a PR touching only `games/<your-game-slug>/`.
+```text
+# TASK: CONTRIBUTE THIS GAME TO OPENGAMEHUB
 
----
+You are an autonomous coding agent contributing a browser game to
+https://github.com/vkop007/OpenGameHub. Complete the entire contribution workflow:
+game setup, compatibility work, validation, local testing, screenshot capture,
+Git commit, fork/remote setup, push, and pull request creation.
 
-## 2. Supported Frameworks & Engines (V1)
+Do not stop after giving instructions. Perform the work yourself. Only stop and
+ask me for input when credentials, GitHub permissions, a genuinely destructive
+choice, or a product decision that cannot be inferred is required.
 
-OpenGameHub uses two modular build adapters (`static` and `vite`) and inspects your project dependencies and configuration automatically:
+## 1. Safety and repository boundaries
 
-- **3D Game Engines**: Three.js (`three`), React Three Fiber (`@react-three/fiber`), Babylon.js (`@babylonjs/core` / `babylonjs`), PlayCanvas (`playcanvas`).
-- **2D Game Engines**: Phaser (`phaser`), PixiJS (`pixi.js` / `@pixi/core`), HTML5 Canvas 2D.
-- **Web Frameworks**: Vanilla HTML/JS/TS, React + Vite, Vue + Vite, Svelte + Vite.
+- Inspect the current directory and Git status before changing anything.
+- Never delete, reset, overwrite, or revert unrelated user changes.
+- Keep the contribution limited to `games/<game-slug>/` and the minimum required
+  contribution metadata. Do not modify `apps/web`, shared `packages/*`, root
+  configuration, GitHub workflows, or another game.
+- Do not commit secrets, credentials, generated dependency caches, or `node_modules`.
+- Never force-push. Never rewrite existing commits.
+- Only submit code and assets that I own or that have a compatible open-source
+  license. If ownership or licensing is unclear, stop and ask.
+- Use the repository's existing package manager and scripts. Do not add a new
+  dependency unless it is required and approved by the repository configuration.
 
-### Explicitly Excluded in V1
+## 2. Inspect and set up the game
+
+1. Identify the game source, its build system, engine, framework, entry point,
+   assets, and required commands.
+2. Choose a lowercase slug matching `^[a-z0-9-]{2,64}$`. Reuse an existing
+   slug only when this is an update to that game.
+3. If this is an external game project, copy or move only the game into
+   `games/<game-slug>/`. Preserve gameplay, controls, visual quality, and assets.
+4. Configure the supported adapter:
+   - Use `static` for an already browser-ready HTML/CSS/JS game.
+   - Use `vite` for Vite-based projects and supported JS/TS frameworks or engines.
+5. Create or update `games/<game-slug>/opengamehub.json` with accurate metadata.
+   Do not add custom shell commands, `buildCommand`, or lifecycle scripts.
+6. Make nested-path compatibility fixes:
+   - Vite builds must use `base: "./"` and output to `dist`.
+   - Replace root-absolute asset and fetch paths with relative paths.
+   - Do not access `window.parent.document` or depend on a same-origin parent.
+   - Guard browser storage access where the sandbox can reject it.
+   - Do not add `preinstall`, `install`, or `postinstall` scripts.
+7. Remove symlinks and do not introduce server-side dependencies. Unity WebGL,
+   Godot Web, native apps, and games requiring a custom backend are not supported.
+
+## 3. Validate and test the actual game
+
+Run the smallest relevant checks first, then fix every failure:
+
+    pnpm install
+    pnpm game:validate <game-slug>
+    pnpm game:build <game-slug>
+
+Run the site with `pnpm dev` and open:
+
+    http://localhost:3000/play/<game-slug>
+
+Use the available browser or desktop automation tool to test the real rendered
+game. Check that it loads without console errors, starts, responds to its main
+controls, displays assets, can restart, and supports fullscreen when applicable.
+Do not claim success based only on source inspection or a successful build.
+
+## 4. Capture and include a gameplay screenshot
+
+After the game is visibly running, capture one clear screenshot showing the
+gameplay (not an editor, terminal, or blank loading screen). Save it as:
+
+    games/<game-slug>/screenshots/gameplay.png
+
+Keep the image reasonably sized and commit it with the game unless repository
+validation explicitly rejects image files. If the automation tool cannot capture
+screenshots, explain that limitation and continue only after recording the
+validation evidence; do not fabricate a screenshot.
+
+## 5. Create the commit and pull request
+
+1. Review `git diff` and `git status`. Confirm every changed file is in scope.
+2. Create a focused branch such as `contribute/<game-slug>`.
+3. Create one focused commit with a useful message, for example:
+   `Add <game title> game`.
+4. Check GitHub authentication with `gh auth status`.
+5. If the current remote is not writable:
+   - Create a fork with `gh repo fork vkop007/OpenGameHub --remote`.
+   - Push the branch to the fork.
+   - Never push to upstream unless the authenticated account explicitly has
+     permission and the user has authorized direct pushes.
+6. Push the branch without force:
+
+   `git push -u <fork-remote> <branch>`
+
+7. Open a pull request targeting `vkop007/OpenGameHub` using `gh pr create`.
+   The PR body must include:
+   - a concise summary of the game and its controls;
+   - the exact validation and test commands run;
+   - the local play URL;
+   - a link or Markdown image reference to `screenshots/gameplay.png`;
+   - any known limitations or follow-up work.
+8. Return the commit SHA, branch, PR URL, screenshot path, and test results.
+
+If GitHub authentication, fork creation, pushing, or PR creation fails, report
+the exact command and error, leave the local work committed and ready, and give
+me only the one next action needed. Do not silently skip a failed step.
+```
+
+## Repository rules
+
+You never need to modify the Next.js platform (`apps/web`), root `package.json`,
+shared `packages/*`, or GitHub workflows to contribute a game.
+
+### Supported frameworks and engines (V1)
+
+OpenGameHub uses two modular build adapters (`static` and `vite`) and inspects
+your project dependencies and configuration automatically:
+
+- **3D game engines**: Three.js, React Three Fiber, Babylon.js, PlayCanvas.
+- **2D game engines**: Phaser, PixiJS, HTML5 Canvas 2D.
+- **Web frameworks**: Vanilla HTML/JS/TS, React + Vite, Vue + Vite, Svelte + Vite.
+
+### Explicitly excluded in V1
+
 - Unity WebGL and Godot Web exports
 - Native desktop or mobile applications
 - Server-dependent games requiring custom Node/Express/WebSocket backends
 
----
+## Optional `opengamehub.json` manifest
 
-## 3. Optional `opengamehub.json` Manifest
-
-Automatic detection is the default. If you want to customize your game's display title, description, controls, or category, add an optional `opengamehub.json` inside your game folder:
+Automatic detection is the default. To customize your game's display title,
+description, controls, or category, add `opengamehub.json` inside the game folder:
 
 ```json
 {
@@ -69,18 +163,17 @@ Automatic detection is the default. If you want to customize your game's display
 }
 ```
 
----
+## AI-assisted game migration
 
-## 4. AI-Assisted Game Migration
+For a focused migration prompt, see
+[AI Game Migration Prompt](./docs/AI_GAME_MIGRATION_PROMPT.md).
 
-Have an existing game project that needs quick adjustments for nested static paths (`/_games/<slug>/<version>/index.html`) or sandboxed iframe execution?
+## Security, licensing, and ownership
 
-Use our copyable **[AI Game Migration Prompt](./docs/AI_GAME_MIGRATION_PROMPT.md)** in Cursor, Claude Code, or Gemini.
-
----
-
-## 5. Security, Licensing & Ownership Requirements
-
-- **Code & Asset Ownership**: Only submit games and assets that you own or have an open-source compatible license to distribute.
-- **Sandboxed Execution**: All games run in `<iframe sandbox="allow-scripts allow-pointer-lock" referrerPolicy="no-referrer">`. Games cannot access the parent page DOM, cookies, or storage.
-- **No Lifecycle Scripts or Symlinks**: `preinstall`, `install`, and `postinstall` hooks in `package.json` and symbolic links inside `/games` are rejected by CI.
+- Submit only games and assets that you own or have an open-source compatible
+  license to distribute.
+- Games run in
+  `<iframe sandbox="allow-scripts allow-pointer-lock" referrerPolicy="no-referrer">`.
+- Games cannot access the parent page DOM, cookies, or storage.
+- `preinstall`, `install`, and `postinstall` hooks and symbolic links inside
+  `/games` are rejected by CI.
