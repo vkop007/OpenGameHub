@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+:root {
+  --coral: #ff6f5e;
+  --coral-dark: #d94f3d;
+  --turquoise: #2ec9bd;
+  --turquoise-dark: #17a89d;
+  --yellow: #ffc93c;
+  --cream: #fff6e6;
+  --navy: #123c4a;
+  --sky: #cdeef6;
+  --purple: #9b7ede;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--sky);
+  color: var(--navy);
+  font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+canvas {
+  display: block;
+}
+
+.font-display {
+  font-family: "Fredoka", "Nunito", ui-sans-serif, system-ui, sans-serif;
+}
+
+.font-body {
+  font-family: "Nunito", ui-sans-serif, system-ui, sans-serif;
+}
+
+@keyframes tc-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translateY(14px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.03) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-pop {
+  animation: tc-pop 0.42s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+
+@keyframes tc-banner {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.045);
+  }
+}
+
+.animate-banner {
+  animation: tc-banner 0.9s ease-in-out infinite;
+}
+
+@keyframes tc-toast {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.94);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-toast {
+  animation: tc-toast 0.28s ease-out both;
+}
+
+@keyframes tc-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-floaty {
+  animation: tc-float 3.2s ease-in-out infinite;
+}
+
+/* thin scrollbars inside the results card */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(18, 60, 74, 0.25) transparent;
+}

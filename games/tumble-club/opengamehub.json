@@ -1,0 +1,20 @@
+{
+  "name": "Tumble Club",
+  "description": "Bounce, dive and shove through three colorful 3D obstacle worlds to reach the finish arch first.",
+  "version": "1.0.0",
+  "author": "vkop007",
+  "engine": "threejs",
+  "framework": "react",
+  "buildAdapter": "vite",
+  "entry": "index.html",
+  "category": "action",
+  "tags": ["3d", "arcade", "obstacle-course", "racing", "threejs"],
+  "controls": [
+    "WASD / Arrow Keys to Move",
+    "Space to Jump",
+    "Shift to Dive",
+    "K to Kick",
+    "Enter to Start or Restart"
+  ],
+  "aspectRatio": "16:9"
+}
