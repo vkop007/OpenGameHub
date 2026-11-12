@@ -11,29 +11,29 @@ export const metadata = {
 
 export default function DocsPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-16 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
       <header className="space-y-3">
-        <div className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
+        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c7f36b]">
           Documentation
         </div>
         <h1
           data-testid="docs-heading"
-          className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl"
+          className="text-5xl font-black tracking-[-0.05em] text-[#f4f1ea] sm:text-7xl"
         >
           Architecture & Developer Reference
         </h1>
-        <p className="max-w-2xl text-base leading-relaxed text-zinc-400">
+        <p className="max-w-2xl text-base leading-relaxed text-[#a2a5ad]">
           How OpenGameHub discovers, validates, builds, and sandboxes community browser games.
         </p>
       </header>
 
       {/* Supported Engines & Build Adapters */}
-      <section className="grid gap-12 border-t border-white/[0.06] pt-10 md:grid-cols-2">
+      <section className="grid gap-12 border-t border-white/10 pt-10 md:grid-cols-2">
         <div className="space-y-3">
-          <h2 className="text-lg font-bold text-white">
+          <h2 className="text-lg font-bold text-[#f4f1ea]">
             Supported V1 Engines & Frameworks
           </h2>
-          <p className="text-xs leading-relaxed text-zinc-400">
+          <p className="text-xs leading-relaxed text-[#a2a5ad]">
             Detected automatically from <code>package.json</code> dependencies, Vite configs, and entry HTML/JS files:
           </p>
           <ul className="space-y-2 pt-1 text-xs leading-relaxed text-zinc-300">
@@ -53,7 +53,7 @@ export default function DocsPage() {
         </div>
 
         <div className="space-y-3">
-          <h2 className="text-lg font-bold text-white">Modular Build Adapters</h2>
+          <h2 className="text-lg font-bold text-[#f4f1ea]">Modular Build Adapters</h2>
           <p className="text-xs leading-relaxed text-zinc-400">
             Every supported project compiles through one of two isolated build adapters:
           </p>
@@ -75,7 +75,7 @@ export default function DocsPage() {
       </section>
 
       {/* Folder, Asset & Security Rules */}
-      <section className="grid gap-8 border-t border-white/[0.06] pt-10 sm:grid-cols-3">
+      <section className="grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-3">
         <div className="space-y-1.5">
           <h3 className="text-sm font-bold text-white">Slug Naming</h3>
           <p className="text-xs leading-relaxed text-zinc-400">
@@ -97,14 +97,14 @@ export default function DocsPage() {
       </section>
 
       {/* Optional Manifest JSON Schema */}
-      <section className="space-y-3 border-t border-white/[0.06] pt-10">
-        <h2 className="text-lg font-bold text-white">
+      <section className="space-y-3 border-t border-white/10 pt-10">
+        <h2 className="text-lg font-bold text-[#f4f1ea]">
           Optional Manifest Schema (<code>opengamehub.json</code>)
         </h2>
         <p className="text-xs text-zinc-400">
           <code>opengamehub.json</code> is optional. When provided, it is validated against this JSON schema. Custom shell commands are strictly forbidden.
         </p>
-        <pre className="max-h-80 overflow-auto rounded-xl bg-white/[0.03] p-5 font-mono text-xs text-zinc-300 ring-1 ring-white/[0.06]">
+        <pre className="max-h-80 overflow-auto border border-white/10 bg-[#12151a] p-5 font-mono text-xs text-[#a2a5ad]">
           {JSON.stringify(MANIFEST_JSON_SCHEMA, null, 2)}
         </pre>
       </section>

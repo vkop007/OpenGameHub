@@ -72,7 +72,9 @@ export function GameExplorer({
   return (
     <div className="space-y-8">
       {/* Open, Unboxed Toolbar */}
-      <div className="flex flex-col gap-4 border-b border-white/[0.06] pb-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-5 border-y border-white/10 py-5 lg:flex-row lg:items-end lg:justify-between">
+        <div className="space-y-2">
+          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6e737c]">Filter the archive</div>
         {/* Category Tabs */}
         <div className="flex flex-wrap items-center gap-1.5">
           {categories.map((cat) => (
@@ -81,15 +83,16 @@ export function GameExplorer({
               type="button"
               data-testid={`category-pill-${cat}`}
               onClick={() => setSelectedCategory(cat)}
-              className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition ${
+              className={`border px-3 py-1.5 text-xs font-medium transition ${
                 selectedCategory === cat
-                  ? "bg-white text-zinc-950 font-semibold"
-                  : "text-zinc-400 hover:bg-white/[0.05] hover:text-zinc-200"
+                    ? "border-[#c7f36b] bg-[#c7f36b] font-semibold text-[#0b0c0f]"
+                    : "border-white/10 text-[#a2a5ad] hover:border-white/30 hover:text-[#f4f1ea]"
               }`}
             >
               {cat === "all" ? "All Games" : cat.charAt(0).toUpperCase() + cat.slice(1)}
             </button>
           ))}
+          </div>
         </div>
 
         {/* Search & Inline Selects */}
@@ -102,7 +105,7 @@ export function GameExplorer({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search games or engines..."
-              className="h-9 w-full rounded-full bg-white/[0.04] pl-9 pr-4 text-xs text-zinc-100 ring-1 ring-white/[0.08] placeholder:text-zinc-500 transition focus:bg-white/[0.06] focus:ring-indigo-500 focus:outline-none"
+              className="h-10 w-full border border-white/10 bg-[#12151a] pl-9 pr-4 text-xs text-[#f4f1ea] placeholder:text-[#6e737c] transition focus:border-[#c7f36b]"
             />
           </div>
 
@@ -129,7 +132,7 @@ export function GameExplorer({
             data-testid="engine-filter-select"
             value={selectedEngine}
             onChange={(e) => setSelectedEngine(e.target.value)}
-            className="h-9 rounded-full bg-white/[0.04] px-3.5 text-xs text-zinc-300 ring-1 ring-white/[0.08] focus:ring-indigo-500 focus:outline-none"
+            className="h-10 rounded-sm border border-white/10 bg-[#12151a] px-3 text-xs text-[#a2a5ad] focus:border-[#c7f36b] focus:outline-none"
           >
             <option value="all">All Engines</option>
             {engines
@@ -148,7 +151,7 @@ export function GameExplorer({
             onChange={(e) =>
               setSortBy(e.target.value as "name-asc" | "name-desc" | "size-asc")
             }
-            className="h-9 rounded-full bg-white/[0.04] px-3.5 text-xs text-zinc-300 ring-1 ring-white/[0.08] focus:ring-indigo-500 focus:outline-none"
+            className="h-10 rounded-sm border border-white/10 bg-[#12151a] px-3 text-xs text-[#a2a5ad] focus:border-[#c7f36b] focus:outline-none"
           >
             <option value="name-asc">A–Z</option>
             <option value="name-desc">Z–A</option>
@@ -160,7 +163,7 @@ export function GameExplorer({
               type="button"
               data-testid="reset-filters-button"
               onClick={resetFilters}
-              className="inline-flex h-9 items-center gap-1 rounded-full px-3 text-xs font-medium text-indigo-400 transition hover:bg-indigo-500/10 hover:text-indigo-300"
+              className="inline-flex h-10 items-center gap-1 px-3 text-xs font-medium text-[#8b93ff] transition hover:bg-white/5 hover:text-[#f4f1ea]"
             >
               <RotateCcw className="h-3 w-3" />
               <span>Reset</span>
@@ -170,9 +173,9 @@ export function GameExplorer({
       </div>
 
       {/* Subtle Count Summary */}
-      <div className="flex items-center justify-between text-xs text-zinc-500">
+      <div className="flex items-center justify-between font-mono text-xs text-[#6e737c]">
         <span data-testid="games-count-summary">
-          Showing <strong className="font-medium text-zinc-300">{filteredGames.length}</strong> of{" "}
+          Showing           <strong className="font-medium text-[#c7f36b]">{filteredGames.length}</strong> of{" "}
           {games.length} games
         </span>
       </div>
@@ -181,7 +184,7 @@ export function GameExplorer({
       {filteredGames.length > 0 ? (
         <div
           data-testid="games-grid"
-          className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {filteredGames.map((game) => (
             <GameCard key={game.id} game={game} />
@@ -190,17 +193,17 @@ export function GameExplorer({
       ) : (
         <div
           data-testid="empty-results-state"
-          className="flex flex-col items-center justify-center py-20 text-center"
+          className="flex flex-col items-center justify-center border border-dashed border-white/15 py-20 text-center"
         >
-          <Sparkles className="h-8 w-8 text-zinc-600 mb-3" />
-          <h3 className="text-base font-semibold text-zinc-200">No matching games found</h3>
-          <p className="mt-1 max-w-sm text-xs text-zinc-500">
+          <Sparkles className="mb-3 h-8 w-8 text-[#c7f36b]" />
+          <h3 className="text-base font-semibold text-[#f4f1ea]">No matching games found</h3>
+          <p className="mt-1 max-w-sm text-xs text-[#a2a5ad]">
             Try clearing your search or engine filter to see all available browser games.
           </p>
           <button
             type="button"
             onClick={resetFilters}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-xs font-semibold text-zinc-950 hover:bg-zinc-200"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-[#c7f36b] px-4 py-2 text-xs font-semibold text-[#0b0c0f] hover:bg-[#f4f1ea]"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset Filters</span>

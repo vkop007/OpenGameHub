@@ -12,26 +12,26 @@ export const metadata = {
 
 export default function ContributePage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-16 px-4 py-12 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-5xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
       {/* Editorial Header */}
       <header className="space-y-4">
-        <div className="text-xs font-semibold uppercase tracking-widest text-indigo-400">
+        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c7f36b]">
           Contributor Guide
         </div>
         <h1
           data-testid="contribute-heading"
-          className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl"
+          className="text-5xl font-black tracking-[-0.05em] text-[#f4f1ea] sm:text-7xl"
         >
           One Game = One Folder.
         </h1>
-        <p className="max-w-2xl text-base leading-relaxed text-zinc-400">
+        <p className="max-w-2xl text-base leading-relaxed text-[#a2a5ad]">
           Never touch the main website, root config, or deployment files. Place your self-contained game folder inside{" "}
           <code className="text-zinc-200 font-mono">games/&lt;your-slug&gt;/</code> and open a Pull Request.
         </p>
       </header>
 
       {/* Clean Horizontal Step Timeline (No boxy cards) */}
-      <section className="border-t border-white/[0.06] pt-10">
+      <section className="border-t border-white/10 pt-10">
         <div className="grid gap-8 sm:grid-cols-4">
           {[
             {
@@ -56,26 +56,26 @@ export default function ContributePage() {
             }
           ].map((step) => (
             <div key={step.num} className="space-y-2">
-              <div className="font-mono text-xs font-bold text-indigo-400">
+              <div className="font-mono text-xs font-bold text-[#c7f36b]">
                 {step.num}
               </div>
-              <h2 className="text-base font-bold text-white">{step.title}</h2>
-              <p className="text-xs leading-relaxed text-zinc-400">{step.desc}</p>
+              <h2 className="text-base font-bold text-[#f4f1ea]">{step.title}</h2>
+              <p className="text-xs leading-relaxed text-[#a2a5ad]">{step.desc}</p>
             </div>
           ))}
         </div>
       </section>
 
       {/* Unboxed Two-Column Architecture Explanation */}
-      <section className="grid gap-10 border-t border-white/[0.06] pt-10 lg:grid-cols-12">
+      <section className="grid gap-10 border-t border-white/10 pt-10 lg:grid-cols-12">
         <div className="space-y-4 lg:col-span-6">
-          <h2 className="text-xl font-bold tracking-tight text-white">
+          <h2 className="text-xl font-bold tracking-tight text-[#f4f1ea]">
             Keep your original folder structure
           </h2>
-          <p className="text-sm leading-relaxed text-zinc-400">
+          <p className="text-sm leading-relaxed text-[#a2a5ad]">
             Whether your project uses <code>src/scenes/</code>, <code>public/</code>, or a flat <code>index.html</code> + <code>game.js</code>, the discovery engine inspects your actual dependencies and entry point.
           </p>
-          <ul className="space-y-2.5 pt-2 text-xs text-zinc-300">
+          <ul className="space-y-2.5 pt-2 text-xs text-[#a2a5ad]">
             {[
               "Automatic engine detection for Three.js, R3F, Babylon.js, PlayCanvas, Phaser, PixiJS, and Canvas 2D",
               "Optional opengamehub.json manifest for custom title, controls, and tags",
@@ -83,7 +83,7 @@ export default function ContributePage() {
               "Sandboxed iframe execution with zero cross-game interference"
             ].map((item) => (
               <li key={item} className="flex items-start gap-2.5">
-                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-[#c7f36b]" />
                 <span>{item}</span>
               </li>
             ))}
@@ -91,7 +91,7 @@ export default function ContributePage() {
         </div>
 
         <div className="lg:col-span-6">
-          <pre className="overflow-x-auto rounded-xl bg-white/[0.03] p-5 font-mono text-xs leading-relaxed text-zinc-300 ring-1 ring-white/[0.06]">{`opengamehub/
+          <pre className="overflow-x-auto border border-white/10 bg-[#12151a] p-5 font-mono text-xs leading-relaxed text-[#a2a5ad]">{`opengamehub/
 └── games/
     ├── space-shooter/          # Vite + Three.js
     │   ├── package.json
@@ -108,19 +108,19 @@ export default function ContributePage() {
       </section>
 
       {/* AI Game Migration Prompt */}
-      <section className="space-y-4 border-t border-white/[0.06] pt-10">
+      <section className="space-y-4 border-t border-white/10 pt-10">
         <div className="flex flex-wrap items-baseline justify-between gap-4">
           <div className="space-y-1">
-            <h2 className="text-xl font-bold tracking-tight text-white">
+            <h2 className="text-xl font-bold tracking-tight text-[#f4f1ea]">
               AI Game Migration Prompt
             </h2>
-            <p className="text-xs text-zinc-400">
+            <p className="text-xs text-[#a2a5ad]">
               Paste this prompt into Cursor, Claude Code, or Gemini while your existing game is open to verify relative asset paths and static output automatically.
             </p>
           </div>
           <Link
             href="/docs"
-            className="inline-flex items-center gap-1 text-xs font-medium text-indigo-400 hover:text-indigo-300"
+            className="inline-flex items-center gap-1 text-xs font-medium text-[#8b93ff] hover:text-[#c7f36b]"
           >
             <span>Full Technical Docs</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -134,11 +134,11 @@ export default function ContributePage() {
       </section>
 
       {/* CLI Quick Reference */}
-      <section className="space-y-3 border-t border-white/[0.06] pt-10">
-        <h2 className="text-lg font-bold tracking-tight text-white">
+      <section className="space-y-3 border-t border-white/10 pt-10">
+        <h2 className="text-lg font-bold tracking-tight text-[#f4f1ea]">
           Local Verification Commands
         </h2>
-        <pre className="overflow-x-auto rounded-xl bg-white/[0.03] p-5 font-mono text-xs leading-relaxed text-zinc-300 ring-1 ring-white/[0.06]">{`pnpm games:scan                  # Scan all folders in /games
+        <pre className="overflow-x-auto border border-white/10 bg-[#12151a] p-5 font-mono text-xs leading-relaxed text-[#a2a5ad]">{`pnpm games:scan                  # Scan all folders in /games
 pnpm game:validate <game-slug>   # Validate a single game folder
 pnpm game:build <game-slug>      # Build a single game into public/_games/
 pnpm dev                         # Launch OpenGameHub locally`}</pre>

@@ -23,16 +23,16 @@ export default async function PlayGamePage({
   }
 
   return (
-    <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6 lg:px-8">
       <UniversalGamePlayer game={game} backHref="/games" />
-      <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-white/10 pt-4 font-mono text-[11px] text-[#6e737c]">
         <span>
           Source Folder: <code>games/{game.id}/</code> • Static Target:{" "}
           <code>{game.playUrl}</code>
         </span>
         <Link
           href={`/games/${game.id}`}
-          className="text-indigo-400 hover:text-indigo-300 font-medium"
+          className="font-medium text-[#8b93ff] hover:text-[#c7f36b]"
         >
           View full game details & metadata →
         </Link>
