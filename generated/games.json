@@ -1,112 +1,35 @@
 {
-  "generatedAt": "2026-11-11T09:43:54.122Z",
+  "generatedAt": "2026-11-12T17:30:44.674Z",
   "games": [
     {
-      "id": "cyber-2048",
-      "name": "Cyber 2048",
-      "description": "Merge energy cores on a 4x4 tactical grid to synthesize the 2048 singularity. Built with React + Vite.",
-      "author": "OpenGameHub Puzzle Guild",
-      "engine": "none",
+      "id": "tumble-club",
+      "name": "Tumble Club",
+      "description": "Bounce, dive and shove through three colorful 3D obstacle worlds to reach the finish arch first.",
+      "author": "vkop007",
+      "engine": "threejs",
       "framework": "react",
       "buildAdapter": "vite",
-      "category": "puzzle",
-      "tags": [
-        "puzzle",
-        "react",
-        "vite",
-        "2048"
-      ],
-      "thumbnail": "/games-thumbnails/cyber-2048.svg",
-      "playUrl": "/_games/cyber-2048/1.0.0/index.html",
-      "version": "1.0.0",
-      "status": "published",
-      "controls": [
-        "Arrow Keys / WASD to Slide Cores",
-        "R to Reset Board"
-      ],
-      "aspectRatio": "16:9",
-      "bundleSizeBytes": 5670
-    },
-    {
-      "id": "dungeon-crawler",
-      "name": "Dungeon Crawler",
-      "description": "Explore ancient catacombs, collect glowing relics, and outsmart sentinel guardians in this 2D Phaser + Vite adventure.",
-      "author": "OpenGameHub 2D Collective",
-      "engine": "phaser",
-      "framework": "vanilla",
-      "buildAdapter": "vite",
-      "category": "adventure",
-      "tags": [
-        "2d",
-        "phaser",
-        "dungeon",
-        "rpg"
-      ],
-      "thumbnail": "/games-thumbnails/dungeon-crawler.svg",
-      "playUrl": "/_games/dungeon-crawler/1.0.0/index.html",
-      "version": "1.0.0",
-      "status": "published",
-      "controls": [
-        "Arrow Keys / WASD to Move",
-        "Collect Gold Relics",
-        "Avoid Red Sentinels"
-      ],
-      "aspectRatio": "16:9",
-      "bundleSizeBytes": 5252
-    },
-    {
-      "id": "neon-breakout",
-      "name": "Neon Breakout",
-      "description": "Fast-paced cyberpunk brick breaker built with pure HTML5 Canvas and vanilla JavaScript. Deflect the plasma sphere, chain combo multipliers, and clear all orbital sectors.",
-      "author": "OpenGameHub Arcade Lab",
-      "engine": "canvas2d",
-      "framework": "vanilla",
-      "buildAdapter": "static",
-      "category": "arcade",
-      "tags": [
-        "arcade",
-        "breakout",
-        "canvas2d",
-        "retro"
-      ],
-      "thumbnail": "/games-thumbnails/neon-breakout.svg",
-      "playUrl": "/_games/neon-breakout/1.0.0/index.html",
-      "version": "1.0.0",
-      "status": "published",
-      "controls": [
-        "Left / Right Arrows",
-        "A / D Keys",
-        "Mouse Move",
-        "Space to Launch"
-      ],
-      "aspectRatio": "16:9",
-      "bundleSizeBytes": 6959
-    },
-    {
-      "id": "space-shooter",
-      "name": "Space Shooter 3D",
-      "description": "Pilot an orbital starfighter through an asteroid and drone blockade in this 3D Three.js + Vite space combat game.",
-      "author": "OpenGameHub 3D Studio",
-      "engine": "threejs",
-      "framework": "vanilla",
-      "buildAdapter": "vite",
-      "category": "shooter",
+      "category": "action",
       "tags": [
         "3d",
-        "threejs",
-        "space",
-        "shooter"
+        "arcade",
+        "obstacle-course",
+        "racing",
+        "threejs"
       ],
-      "thumbnail": "/games-thumbnails/space-shooter.svg",
-      "playUrl": "/_games/space-shooter/1.0.0/index.html",
+      "thumbnail": "/games-thumbnails/tumble-club.svg",
+      "playUrl": "/_games/tumble-club/1.0.0/index.html",
       "version": "1.0.0",
       "status": "published",
       "controls": [
-        "WASD / Arrow Keys to Steer",
-        "Space / Click to Fire Lasers"
+        "WASD / Arrow Keys to Move",
+        "Space to Jump",
+        "Shift to Dive",
+        "K to Kick",
+        "Enter to Start or Restart"
       ],
       "aspectRatio": "16:9",
-      "bundleSizeBytes": 8221
+      "bundleSizeBytes": 953171
     }
   ],
   "failedGames": []
