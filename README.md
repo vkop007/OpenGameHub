@@ -163,4 +163,6 @@ When importing the monorepo into Vercel:
 - Contributed games are treated as untrusted input.
 - Every game executes inside `<iframe sandbox="allow-scripts allow-pointer-lock" referrerPolicy="no-referrer">` without `allow-same-origin`, preventing access to parent DOM, cookies, or web storage.
 - Pull request validation workflows run with `permissions: contents: read` and never use `pull_request_target` or expose deployment secrets.
-- Licensed under the **MIT License**.
+- Licensed under the **MIT License**. See [LICENSE.md](./LICENSE.md).
+- Report vulnerabilities privately, as described in [SECURITY.md](./SECURITY.md).
+- Everyone taking part is expected to follow the [Code of Conduct](./CODE_OF_CONDUCT.md).

@@ -4,6 +4,14 @@
   "private": true,
   "type": "module",
   "description": "Universal open-source browser game platform where one game = one folder inside /games",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vkop007/OpenGameHub.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
   "packageManager": "pnpm@10.33.2",
   "scripts": {
     "dev": "pnpm games:build && pnpm --filter @opengamehub/web dev",

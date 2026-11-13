@@ -1,0 +1,55 @@
+name: Bug report
+description: Something on the platform or in a game is not working
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this. For security problems, do **not** use this form. See [SECURITY.md](https://github.com/vkop007/OpenGameHub/blob/main/SECURITY.md).
+  - type: dropdown
+    id: area
+    attributes:
+      label: Where does the problem happen?
+      options:
+        - Website (pages, search, filters)
+        - Game player (iframe, fullscreen, controls)
+        - A specific game
+        - Build or validation pipeline (game:validate, game:build)
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Tell us what you saw and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open /games/tumble-club
+        2. Click Fullscreen
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: game
+    attributes:
+      label: Game slug (if a specific game)
+      placeholder: tumble-club
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 130 on macOS 15
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console output or screenshots
+      description: Paste any browser console errors or drag in a screenshot.

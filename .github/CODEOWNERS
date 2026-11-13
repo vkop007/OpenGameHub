@@ -1,0 +1,8 @@
+# Default reviewer for everything
+*                       @vkop007
+
+# Security-sensitive areas: the sandbox, the bridge and CI
+/.github/               @vkop007
+/packages/game-player/  @vkop007
+/packages/game-bridge/  @vkop007
+/SECURITY.md            @vkop007

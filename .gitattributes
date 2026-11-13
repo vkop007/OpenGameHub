@@ -1,0 +1,25 @@
+# Normalize line endings
+* text=auto eol=lf
+
+# Binary assets: never diff or convert
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.glb binary
+*.gltf text
+
+# Lockfiles are generated: keep them out of review diffs
+pnpm-lock.yaml -diff linguist-generated
+bun.lock -diff linguist-generated
+generated/games.json linguist-generated
+
+# Keep GitHub's language stats about the platform, not bundled game output
+apps/web/public/_games/** linguist-vendored

@@ -4,6 +4,10 @@ Welcome to **OpenGameHub**! Our core contribution rule is simple:
 
 > **ONE GAME = ONE FOLDER INSIDE `/games`.**
 
+By taking part you agree to follow our [Code of Conduct](./CODE_OF_CONDUCT.md). Contributions are
+released under the project's [MIT License](./LICENSE.md). To report a security problem, see
+[SECURITY.md](./SECURITY.md).
+
 The recommended workflow is AI-assisted and end to end. Give the prompt below to
 your coding agent from the repository or game-project directory. The agent should
 inspect the project, prepare the game, validate it, launch it, capture a gameplay

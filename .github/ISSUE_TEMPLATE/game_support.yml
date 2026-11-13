@@ -1,0 +1,45 @@
+name: Game contribution help
+description: You are adding a game and validation, build or detection is failing
+labels: ["game-contribution"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Remember the rule: **one game = one folder inside `/games`**. Please do not change platform code to make a game build. If the platform needs to change, say so below.
+  - type: input
+    id: slug
+    attributes:
+      label: Game folder name
+      placeholder: my-game
+    validations:
+      required: true
+  - type: dropdown
+    id: stack
+    attributes:
+      label: Engine / framework
+      options:
+        - Three.js
+        - React Three Fiber
+        - Babylon.js
+        - PlayCanvas
+        - Phaser
+        - PixiJS
+        - HTML5 Canvas 2D
+        - Vanilla HTML / JS / TS
+        - React + Vite
+        - Vue + Vite
+        - Svelte + Vite
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Output of `pnpm game:validate <slug>` and `pnpm game:build <slug>`
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else we should know?
