@@ -15,10 +15,6 @@ import {
   Maximize2,
   Minimize2,
   RotateCcw,
-  Pause,
-  Play,
-  Volume2,
-  VolumeX,
   ShieldCheck
 } from "lucide-react";
 
@@ -44,8 +40,6 @@ export function UniversalGamePlayer({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const [showControlsGuide, setShowControlsGuide] = useState<boolean>(true);
-  const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [isMuted, setIsMuted] = useState<boolean>(false);
   const [gameStatus, setGameStatus] = useState<{
     score?: number;
     level?: string | number;
@@ -176,42 +170,7 @@ export function UniversalGamePlayer({
     setErrorMessage(null);
     setLoadingProgress(null);
     setGameStatus(null);
-    setIsPaused(false);
     setIframeKey((prev) => prev + 1);
-  }, []);
-
-  const togglePause = useCallback(() => {
-    setIsPaused((prev) => {
-      const next = !prev;
-      const iframeWin = iframeRef.current?.contentWindow;
-      if (iframeWin) {
-        iframeWin.postMessage(
-          {
-            namespace: OPENGAMEHUB_BRIDGE_NAMESPACE,
-            type: next ? "PAUSE_GAME" : "RESUME_GAME"
-          },
-          "*"
-        );
-      }
-      return next;
-    });
-  }, []);
-
-  const toggleMute = useCallback(() => {
-    setIsMuted((prev) => {
-      const next = !prev;
-      const iframeWin = iframeRef.current?.contentWindow;
-      if (iframeWin) {
-        iframeWin.postMessage(
-          {
-            namespace: OPENGAMEHUB_BRIDGE_NAMESPACE,
-            type: next ? "MUTE_AUDIO" : "UNMUTE_AUDIO"
-          },
-          "*"
-        );
-      }
-      return next;
-    });
   }, []);
 
   const toolbarButton =
@@ -342,39 +301,12 @@ export function UniversalGamePlayer({
           <div className="flex items-center gap-1">
             <button
               type="button"
-              onClick={togglePause}
-              aria-pressed={isPaused}
-              className={toolbarButton}
-            >
-              {isPaused ? (
-                <>
-                  <Play className="h-4 w-4 fill-current" />
-                  <span>Resume</span>
-                </>
-              ) : (
-                <>
-                  <Pause className="h-4 w-4 fill-current" />
-                  <span>Pause</span>
-                </>
-              )}
-            </button>
-            <button
-              type="button"
               onClick={handleRestart}
               data-testid="player-restart-button"
               className={toolbarButton}
             >
               <RotateCcw className="h-4 w-4" />
               <span>Restart</span>
-            </button>
-            <button
-              type="button"
-              onClick={toggleMute}
-              aria-pressed={isMuted}
-              className={toolbarButton}
-            >
-              {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-              <span className="hidden sm:inline">{isMuted ? "Unmute" : "Mute"}</span>
             </button>
           </div>
 
