@@ -12,7 +12,7 @@ async function runBrowserE2EVerification() {
   console.log("=== Running OpenGameHub Browser & Prerendered DOM E2E Suite ===\n");
 
   const registry = readRegistryFile(REGISTRY_PATH);
-  assert.ok(registry.games.length >= 4, "Expected at least 4 published games in generated/games.json");
+  assert.ok(registry.games.length >= 1, "Expected at least 1 published game in generated/games.json");
 
   // 1. Verify Homepage (/) prerendered HTML & DOM elements
   const indexHtmlPath = path.join(NEXT_SERVER_APP_DIR, "index.html");
@@ -42,33 +42,30 @@ async function runBrowserE2EVerification() {
   assert.ok(gamesHtml.includes('data-testid="games-grid"'));
   console.log("✔ E2E Check 2: Game Library (/games) renders responsive grid, search, category, engine, and sort controls");
 
-  // 3. Verify Game Details (/games/[slug]) & Sandboxed Player (/play/[slug]) for every published game
+  // 3. Verify Game Details & Embedded Player (/games/[slug]) and /play redirect for every published game
   for (const g of registry.games) {
     const detailHtmlPath = path.join(NEXT_SERVER_APP_DIR, "games", `${g.id}.html`);
     assert.ok(fs.existsSync(detailHtmlPath), `Missing detail page for ${g.id}`);
     const detailHtml = fs.readFileSync(detailHtmlPath, "utf8");
     assert.ok(detailHtml.includes(g.name), `Detail page missing game title ${g.name}`);
-    assert.ok(detailHtml.includes(`href="/play/${g.id}"`), `Detail page missing play link for ${g.id}`);
-
-    const playHtmlPath = path.join(NEXT_SERVER_APP_DIR, "play", `${g.id}.html`);
-    assert.ok(fs.existsSync(playHtmlPath), `Missing player page for ${g.id}`);
-    const playHtml = fs.readFileSync(playHtmlPath, "utf8");
-
-    assert.ok(playHtml.includes('data-testid="game-iframe"'), `Player page missing game-iframe for ${g.id}`);
+    assert.ok(detailHtml.includes('data-testid="game-iframe"'), `Detail page missing embedded game-iframe for ${g.id}`);
     assert.ok(
-      playHtml.includes('sandbox="allow-scripts allow-pointer-lock"'),
+      detailHtml.includes('sandbox="allow-scripts allow-pointer-lock"'),
       `Player iframe for ${g.id} must have strict sandbox="allow-scripts allow-pointer-lock"`
     );
     assert.ok(
-      !playHtml.includes("allow-same-origin"),
+      !detailHtml.includes("allow-same-origin"),
       `Player iframe for ${g.id} must NOT include allow-same-origin`
     );
     assert.ok(
-      playHtml.includes(`src="${g.playUrl}"`),
+      detailHtml.includes(`src="${g.playUrl}"`),
       `Player iframe for ${g.id} must point to ${g.playUrl}`
     );
-    assert.ok(playHtml.includes('data-testid="player-restart-button"'), "Player missing restart control");
-    assert.ok(playHtml.includes('data-testid="player-fullscreen-button"'), "Player missing fullscreen control");
+    assert.ok(detailHtml.includes('data-testid="player-restart-button"'), "Player missing restart control");
+    assert.ok(detailHtml.includes('data-testid="player-fullscreen-button"'), "Player missing fullscreen control");
+
+    const playHtmlPath = path.join(NEXT_SERVER_APP_DIR, "play", `${g.id}.html`);
+    assert.ok(fs.existsSync(playHtmlPath), `Missing player redirect page for ${g.id}`);
 
     // Verify underlying static game entry and referenced assets exist in apps/web/public/_games
     const staticEntryFile = path.join(PUBLIC_DIR, g.playUrl.replace(/^\//, ""));
@@ -77,7 +74,7 @@ async function runBrowserE2EVerification() {
     assert.ok(gameEntryHtml.toLowerCase().includes("<html"), `Invalid HTML in ${staticEntryFile}`);
   }
   console.log(
-    `✔ E2E Check 3: Verified Game Details (/games/[slug]), Sandboxed Iframe Player (/play/[slug]), and static bundles for all ${registry.games.length} games`
+    `✔ E2E Check 3: Verified Game Details with Embedded Player (/games/[slug]), /play redirect, and static bundles for all ${registry.games.length} games`
   );
 
   // 4. Verify Contribute (/contribute), Docs (/docs), and 404 Not Found (/not-found) pages

@@ -4,17 +4,19 @@ import { AlertOctagon, ArrowLeft } from "lucide-react";
 
 export default function NotFoundPage() {
   return (
-    <div className="mx-auto flex max-w-xl flex-col items-center justify-center px-4 py-28 text-center">
-      <AlertOctagon className="mb-4 h-12 w-12 text-[#c7f36b]" />
-      <h1 data-testid="not-found-heading" className="text-3xl font-black text-[#f4f1ea]">
+    <div className="relative z-10 mx-auto flex max-w-xl flex-col items-center justify-center px-4 py-28 text-center">
+      <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center mb-5 text-amber-400">
+        <AlertOctagon className="h-8 w-8" />
+      </div>
+      <h1 data-testid="not-found-heading" className="text-3xl font-black text-white font-heading">
         Game or Page Not Found
       </h1>
-      <p className="mt-2 text-sm text-[#a2a5ad]">
+      <p className="mt-3 text-sm text-slate-400 max-w-md">
         The requested game slug does not exist in the published OpenGameHub registry or failed build validation.
       </p>
       <Link
         href="/games"
-        className="mt-6 inline-flex items-center gap-2 rounded-sm bg-[#c7f36b] px-5 py-2.5 text-xs font-bold text-[#0b0c0f] hover:bg-[#f4f1ea]"
+        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-2.5 text-xs font-semibold text-slate-950 hover:bg-slate-200 transition-colors shadow-sm"
       >
         <ArrowLeft className="h-4 w-4" />
         <span>Return to Game Library</span>

@@ -2,116 +2,212 @@ import React from "react";
 import Link from "next/link";
 import { getPublishedGames } from "@/lib/registry";
 import { GameExplorer } from "@/components/game-explorer";
-import { ArrowRight, GitPullRequest, Sparkles, Boxes, ShieldCheck } from "lucide-react";
+import {
+  Sparkles,
+  ArrowRight,
+  GitBranch,
+  Layers
+} from "lucide-react";
 
 export default function HomePage() {
   const games = getPublishedGames();
 
   return (
-    <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      {/* Open, Unboxed Hero Section */}
-      <section className="relative overflow-hidden border-b border-white/10 py-20 sm:py-28">
-        <div className="pointer-events-none absolute right-0 top-10 font-mono text-[clamp(8rem,22vw,20rem)] font-bold leading-none text-white/[0.025]">01</div>
-        <div className="relative max-w-4xl space-y-7">
-          <div className="inline-flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c7f36b]">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Open-Source Browser Game Platform</span>
-          </div>
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 space-y-16">
+      {/* BEGIN: HeroSection */}
+      <section
+        aria-labelledby="hero-title"
+        className="max-w-4xl space-y-8 pt-4"
+        data-purpose="hero-banner"
+      >
+        {/* Top Pill Notification Badge */}
+        <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-surface-elevated border border-surface-border text-slate-300 text-xs font-medium tracking-wide">
+          <span className="flex h-2 w-2 relative">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          </span>
+          <Sparkles className="w-3.5 h-3.5 text-slate-400" />
+          <span className="font-mono text-[11px] uppercase tracking-wider font-semibold text-slate-300">
+            Open-Source Browser Game Platform
+          </span>
+        </div>
 
+        {/* Main Headline */}
+        <div className="space-y-2">
           <h1
             data-testid="hero-heading"
-            className="max-w-4xl text-5xl font-black leading-[0.95] tracking-[-0.06em] text-[#f4f1ea] sm:text-8xl"
+            id="hero-title"
+            className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.08] font-heading"
           >
-            Play community games.{" "}
-            <span className="text-[#a2a5ad]">Contribute in one folder.</span>
+            Play community games. <br />
+            <span className="text-slate-400">
+              Contribute in one folder.
+            </span>
           </h1>
+        </div>
 
-          <p className="max-w-2xl text-base leading-relaxed text-[#a2a5ad] sm:text-lg">
-            Drop any Three.js, Phaser, PixiJS, Babylon.js, React, Vue, Svelte, or HTML5 game into{" "}
-            <code className="font-mono text-sm text-[#c7f36b]">/games</code>. OpenGameHub automatically detects your stack, builds static bundles, and runs every game in an isolated sandbox.
-          </p>
+        {/* Hero Description */}
+        <p className="text-slate-400 text-base sm:text-lg lg:text-xl font-normal max-w-3xl leading-relaxed">
+          Drop any <span className="text-slate-200 font-medium">Three.js</span>,{" "}
+          <span className="text-slate-200 font-medium">Phaser</span>,{" "}
+          <span className="text-slate-200 font-medium">PixiJS</span>,{" "}
+          <span className="text-slate-200 font-medium">Babylon.js</span>, React, Vue, Svelte, or
+          HTML5 game into{" "}
+          <code className="font-mono text-cyan-400 bg-surface-card px-2 py-0.5 rounded border border-surface-border text-sm">
+            /games
+          </code>
+          . OpenGameHub automatically detects your stack, builds static bundles, and runs every
+          game in an isolated sandbox.
+        </p>
 
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            <Link
-              href="/games"
-              data-testid="hero-browse-games"
-              className="inline-flex items-center gap-2 rounded-sm bg-[#c7f36b] px-6 py-3 text-sm font-bold text-[#0b0c0f] transition hover:bg-[#f4f1ea]"
-            >
-              <span>Browse Library</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/contribute"
-              data-testid="hero-contribute-cta"
-              className="inline-flex items-center gap-2 border border-white/15 px-5 py-3 text-sm font-medium text-[#a2a5ad] transition hover:border-white/35 hover:text-[#f4f1ea]"
-            >
-              <GitPullRequest className="h-4 w-4 text-indigo-400" />
-              <span>Contribute a Game</span>
-            </Link>
+        {/* Action Buttons & Quick Terminal Command */}
+        <div className="flex flex-wrap items-center gap-4 pt-2">
+          {/* Primary Browse Library Button */}
+          <Link
+            href="/games"
+            data-testid="hero-browse-games"
+            className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl bg-white hover:bg-slate-200 text-slate-950 font-semibold text-sm transition-all duration-200 shadow-sm active:scale-[0.98]"
+          >
+            <span>Browse Library</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+          </Link>
+
+          {/* Secondary Code/Terminal Contribute Button */}
+          <Link
+            href="/contribute"
+            data-testid="hero-contribute-cta"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-surface-card hover:bg-surface-elevated text-slate-200 hover:text-white border border-surface-border hover:border-slate-500 font-medium text-sm transition-all active:scale-[0.98]"
+          >
+            <GitBranch className="w-4 h-4 text-slate-400" />
+            <span>Contribute a Game</span>
+          </Link>
+
+          {/* Quick Terminal Snippet */}
+          <div className="hidden sm:flex items-center gap-2.5 bg-surface-card border border-surface-border rounded-xl px-3.5 py-2.5 font-mono text-xs text-slate-400">
+            <span className="text-slate-500 select-none">$</span>
+            <span className="text-slate-300">npx opengamehub create my-game</span>
+          </div>
+        </div>
+
+        {/* Feature Telemetry Chips */}
+        <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-400 border-t border-surface-border">
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span>Zero-Config Sandboxing</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+            <span>WebGL &amp; WebGPU Ready</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+            <span>Isolated Memory Runtime</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400" />
+            <span>GamePad &amp; WebRTC API</span>
           </div>
         </div>
       </section>
+      {/* END: HeroSection */}
 
-      <section className="grid border-b border-white/10 sm:grid-cols-3">
-        {[
-          { value: String(games.length).padStart(2, "0"), label: "playable releases", Icon: Boxes },
-          { value: "01", label: "folder per game", Icon: GitPullRequest },
-          { value: "100%", label: "sandboxed runtime", Icon: ShieldCheck }
-        ].map(({ value, label, Icon }) => (
-          <div key={String(label)} className="flex items-center gap-4 border-white/10 py-6 sm:border-r sm:px-6 first:pl-0 last:border-0">
-            <Icon className="h-5 w-5 text-[#8b93ff]" />
-            <div><div className="font-mono text-2xl font-bold text-[#f4f1ea]">{value}</div><div className="text-xs uppercase tracking-wider text-[#6e737c]">{label}</div></div>
+      {/* BEGIN: GamesDirectorySection */}
+      <section
+        id="games-directory"
+        aria-labelledby="directory-title"
+        className="space-y-6 pt-6"
+        data-purpose="games-catalog"
+      >
+        {/* Section Header */}
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 pb-2 border-b border-surface-border">
+          <div>
+            <h2
+              id="directory-title"
+              className="text-xl sm:text-2xl font-bold tracking-tight text-white font-heading"
+            >
+              Featured &amp; Playable Now
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 mt-1">
+              Realtime community submissions curated and verified for in-browser execution.
+            </p>
           </div>
-        ))}
-      </section>
-
-      {/* Main Game Catalog (Cards Only for Games) */}
-      <section className="space-y-6 pb-20">
-        <div className="flex items-baseline justify-between">
-          <h2 className="text-2xl font-bold tracking-tight text-[#f4f1ea]">
-            Featured & Playable Now
-          </h2>
           <Link
             href="/games"
-            className="text-xs font-medium text-[#8b93ff] transition hover:text-[#f4f1ea]"
+            className="inline-flex items-center gap-1 text-xs font-medium text-slate-400 hover:text-white transition-colors group"
           >
-            View full directory →
+            <span>View full directory</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
 
+        {/* Interactive Explorer Grid */}
         <GameExplorer games={games} />
       </section>
+      {/* END: GamesDirectorySection */}
 
-      {/* Clean Minimal Footer CTA (No heavy nested boxes) */}
-      <section className="border-t border-white/10 py-16">
-        <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
-          <div className="max-w-xl space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight text-[#f4f1ea]">
-              Built a browser game? Ship it with one Pull Request.
-            </h2>
-            <p className="text-sm leading-relaxed text-[#a2a5ad]">
-              No database setup, no root config edits, and no custom SDK required. Paste your folder into{" "}
-              <code className="text-zinc-200 font-mono">games/&lt;slug&gt;</code> or use our copyable AI prompt to verify static paths in seconds.
+      {/* BEGIN: HowItWorksSection */}
+      <section
+        className="rounded-2xl border border-surface-border bg-surface-card p-6 sm:p-8"
+        data-purpose="contribution-guide"
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+          <div className="space-y-3 lg:col-span-1">
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono text-slate-400 uppercase tracking-wider font-semibold">
+              <Layers className="w-4 h-4" />
+              <span>Universal Monorepo</span>
+            </div>
+            <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight font-heading">
+              How simple is submitting?
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              No backend databases or complex registration. Commit a folder under{" "}
+              <code className="text-cyan-400 font-mono">/games/&lt;your-title&gt;</code> with an
+              entrypoint, and automated CI handles build, preview, and sandbox verification.
             </p>
           </div>
-
-          <div className="flex flex-wrap items-center gap-3">
-            <Link
-              href="/contribute"
-              className="inline-flex items-center gap-2 rounded-sm bg-[#8b93ff] px-5 py-2.5 text-xs font-bold text-[#0b0c0f] transition hover:bg-[#c7f36b]"
-            >
-              <span>Contribution Guide & AI Prompt</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <Link
-              href="/docs"
-              className="inline-flex items-center gap-2 border border-white/10 px-4 py-2.5 text-xs font-medium text-[#a2a5ad] transition hover:bg-white/[0.04] hover:text-[#f4f1ea]"
-            >
-              <span>Architecture Docs</span>
-            </Link>
+          <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs items-stretch">
+            {/* Step 1 */}
+            <div className="p-4 rounded-xl bg-surface-elevated border border-surface-border flex flex-col justify-between h-full space-y-2">
+              <div>
+                <span className="text-slate-200 font-bold block">01 / FORK &amp; CLONE</span>
+                <p className="mt-1.5 text-slate-400 text-[11px] font-sans">
+                  Fork the repo, create a branch, and run development server locally with hot reload.
+                </p>
+              </div>
+              <div className="pt-2 text-[10px] text-slate-500 font-mono border-t border-surface-border/60">
+                STEP 01
+              </div>
+            </div>
+            {/* Step 2 */}
+            <div className="p-4 rounded-xl bg-surface-elevated border border-surface-border flex flex-col justify-between h-full space-y-2">
+              <div>
+                <span className="text-slate-200 font-bold block">02 / ADD FOLDER</span>
+                <p className="mt-1.5 text-slate-400 text-[11px] font-sans">
+                  Add your Vite, Webpack, or raw HTML/JS bundle with a lightweight{" "}
+                  <code className="text-slate-300">opengamehub.json</code> manifest.
+                </p>
+              </div>
+              <div className="pt-2 text-[10px] text-slate-500 font-mono border-t border-surface-border/60">
+                STEP 02
+              </div>
+            </div>
+            {/* Step 3 */}
+            <div className="p-4 rounded-xl bg-surface-elevated border border-surface-border flex flex-col justify-between h-full space-y-2">
+              <div>
+                <span className="text-slate-200 font-bold block">03 / PULL REQUEST</span>
+                <p className="mt-1.5 text-slate-400 text-[11px] font-sans">
+                  Submit PR. Once automated sandbox security tests pass, your game goes live to
+                  thousands!
+                </p>
+              </div>
+              <div className="pt-2 text-[10px] text-slate-500 font-mono border-t border-surface-border/60">
+                STEP 03
+              </div>
+            </div>
           </div>
         </div>
       </section>
+      {/* END: HowItWorksSection */}
     </div>
   );
 }

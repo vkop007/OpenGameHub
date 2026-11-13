@@ -22,3 +22,5 @@ playwright-report/
 .env*
 !.env.example
 .vercel
+stitch_designs/
+stitch_dump/

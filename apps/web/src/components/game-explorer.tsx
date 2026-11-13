@@ -4,28 +4,49 @@ import React, { useMemo, useState } from "react";
 import type { PublishedGameEntry } from "@opengamehub/game-registry";
 import { ENGINE_LABELS } from "@/lib/registry";
 import { GameCard } from "@/components/game-card";
-import { Search, RotateCcw, Sparkles } from "lucide-react";
+import {
+  Search,
+  RotateCcw,
+  Sparkles,
+  PlayCircle,
+  CheckCircle2,
+  Gamepad,
+  ShieldCheck,
+  ChevronDown
+} from "lucide-react";
 
 export interface GameExplorerProps {
   games: PublishedGameEntry[];
   initialCategory?: string;
   initialEngine?: string;
+  showTelemetryPills?: boolean;
 }
 
 export function GameExplorer({
   games,
   initialCategory = "all",
-  initialEngine = "all"
+  initialEngine = "all",
+  showTelemetryPills = false
 }: GameExplorerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedEngine, setSelectedEngine] = useState(initialEngine);
-  const [sortBy, setSortBy] = useState<"name-asc" | "name-desc" | "size-asc">("name-asc");
+  const [sortBy, setSortBy] = useState<"popular" | "name-asc" | "name-desc" | "rating" | "size-asc">("popular");
 
+  // Dynamic categories from games plus common categories
   const categories = useMemo(() => {
-    const set = new Set<string>();
-    for (const g of games) set.add(g.category);
-    return ["all", ...Array.from(set).sort()];
+    const defaultCats = ["all", "action", "arcade", "puzzle", "3d", "multiplayer", "experimental"];
+    const gameCats = new Set<string>();
+    for (const g of games) {
+      if (g.category) gameCats.add(g.category.toLowerCase());
+      for (const t of g.tags) {
+        if (["3d", "arcade", "puzzle", "action", "multiplayer"].includes(t.toLowerCase())) {
+          gameCats.add(t.toLowerCase());
+        }
+      }
+    }
+    const combined = Array.from(new Set([...defaultCats, ...Array.from(gameCats)]));
+    return combined;
   }, [games]);
 
   const engines = useMemo(() => {
@@ -37,8 +58,11 @@ export function GameExplorer({
   const filteredGames = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     const list = games.filter((game) => {
-      if (selectedCategory !== "all" && game.category !== selectedCategory) {
-        return false;
+      if (selectedCategory !== "all") {
+        const matchesCategory =
+          game.category?.toLowerCase() === selectedCategory ||
+          game.tags.some((t) => t.toLowerCase() === selectedCategory);
+        if (!matchesCategory) return false;
       }
       if (selectedEngine !== "all" && game.engine !== selectedEngine) {
         return false;
@@ -56,7 +80,8 @@ export function GameExplorer({
     list.sort((a, b) => {
       if (sortBy === "name-asc") return a.name.localeCompare(b.name);
       if (sortBy === "name-desc") return b.name.localeCompare(a.name);
-      return a.bundleSizeBytes - b.bundleSizeBytes;
+      if (sortBy === "size-asc") return a.bundleSizeBytes - b.bundleSizeBytes;
+      return 0; // Default order
     });
 
     return list;
@@ -66,125 +91,178 @@ export function GameExplorer({
     setSearchQuery("");
     setSelectedCategory("all");
     setSelectedEngine("all");
-    setSortBy("name-asc");
+    setSortBy("popular");
+  };
+
+  const getCategoryLabel = (cat: string) => {
+    if (cat === "all") return "All Games";
+    if (cat === "3d") return "3D WebGL";
+    return cat.charAt(0).toUpperCase() + cat.slice(1);
   };
 
   return (
-    <div className="space-y-8">
-      {/* Open, Unboxed Toolbar */}
-      <div className="flex flex-col gap-5 border-y border-white/10 py-5 lg:flex-row lg:items-end lg:justify-between">
-        <div className="space-y-2">
-          <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6e737c]">Filter the archive</div>
-        {/* Category Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              data-testid={`category-pill-${cat}`}
-              onClick={() => setSelectedCategory(cat)}
-              className={`border px-3 py-1.5 text-xs font-medium transition ${
-                selectedCategory === cat
-                    ? "border-[#c7f36b] bg-[#c7f36b] font-semibold text-[#0b0c0f]"
-                    : "border-white/10 text-[#a2a5ad] hover:border-white/30 hover:text-[#f4f1ea]"
-              }`}
-            >
-              {cat === "all" ? "All Games" : cat.charAt(0).toUpperCase() + cat.slice(1)}
-            </button>
-          ))}
+    <div className="space-y-6">
+      {/* Optional Telemetry / Feature Stat Pills */}
+      {showTelemetryPills && (
+        <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-card pl-3 pr-4 border border-surface-border text-xs text-slate-300">
+            <PlayCircle className="w-4 h-4 text-slate-400" />
+            <span>100% In-Browser Playable</span>
+          </div>
+          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-card pl-3 pr-4 border border-surface-border text-xs text-slate-300">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>Zero Local Dependencies</span>
+          </div>
+          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-card pl-3 pr-4 border border-surface-border text-xs text-slate-300">
+            <Gamepad className="w-4 h-4 text-slate-400" />
+            <span>Gamepad &amp; Keyboard Supported</span>
+          </div>
+          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-surface-card pl-3 pr-4 border border-surface-border text-xs text-slate-300">
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+            <span>Community Verified</span>
           </div>
         </div>
+      )}
 
-        {/* Search & Inline Selects */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          <div className="relative min-w-[220px] flex-1 sm:w-64">
-            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
+      {/* Controls & Filter Toolbar */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        {/* Category Filter Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
+          {categories.map((cat) => {
+            const isActive = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                type="button"
+                data-testid={`category-pill-${cat}`}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
+                  isActive
+                    ? "bg-white text-slate-950 shadow-sm"
+                    : "text-slate-400 hover:text-white hover:bg-surface-elevated border border-transparent"
+                }`}
+              >
+                {getCategoryLabel(cat)}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Filter Dropdowns & Live Search Input */}
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+          {/* Search games or engines */}
+          <div className="relative w-full sm:w-64">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+              <Search className="w-3.5 h-3.5" />
+            </div>
             <input
-              type="search"
+              type="text"
               data-testid="game-search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search games or engines..."
-              className="h-10 w-full border border-white/10 bg-[#12151a] pl-9 pr-4 text-xs text-[#f4f1ea] placeholder:text-[#6e737c] transition focus:border-[#c7f36b]"
+              className="w-full pl-8 pr-3 py-1.5 bg-surface-elevated border border-surface-border rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
             />
           </div>
 
-          {/* Keep category select accessible for automated filters */}
-          <select
-            aria-label="Filter by category"
-            data-testid="category-filter-select"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            className="sr-only"
-          >
-            <option value="all">All Categories</option>
-            {categories
-              .filter((c) => c !== "all")
-              .map((cat) => (
+          {/* Category Filter Dropdown */}
+          <div className="relative">
+            <select
+              aria-label="Filter by category"
+              data-testid="category-filter-select"
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="appearance-none bg-surface-elevated border border-surface-border text-slate-300 text-xs rounded-lg pl-3 pr-8 py-1.5 hover:border-slate-500 focus:outline-none focus:border-slate-500 transition-colors cursor-pointer"
+            >
+              {categories.map((cat) => (
                 <option key={cat} value={cat}>
-                  {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  {getCategoryLabel(cat)}
                 </option>
               ))}
-          </select>
+            </select>
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+              <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
+              </svg>
+            </div>
+          </div>
 
-          <select
-            aria-label="Filter by engine"
-            data-testid="engine-filter-select"
-            value={selectedEngine}
-            onChange={(e) => setSelectedEngine(e.target.value)}
-            className="h-10 rounded-sm border border-white/10 bg-[#12151a] px-3 text-xs text-[#a2a5ad] focus:border-[#c7f36b] focus:outline-none"
-          >
-            <option value="all">All Engines</option>
-            {engines
-              .filter((e) => e !== "all")
-              .map((eng) => (
-                <option key={eng} value={eng}>
-                  {ENGINE_LABELS[eng] ?? eng}
-                </option>
-              ))}
-          </select>
+          {/* Engine Filter Dropdown */}
+          <div className="relative">
+            <select
+              aria-label="Filter by engine"
+              data-testid="engine-filter-select"
+              value={selectedEngine}
+              onChange={(e) => setSelectedEngine(e.target.value)}
+              className="appearance-none bg-surface-elevated border border-surface-border text-slate-300 text-xs rounded-lg pl-3 pr-8 py-1.5 hover:border-slate-500 focus:outline-none focus:border-slate-500 transition-colors cursor-pointer"
+            >
+              <option value="all">All Engines</option>
+              {engines
+                .filter((e) => e !== "all")
+                .map((eng) => (
+                  <option key={eng} value={eng}>
+                    {ENGINE_LABELS[eng] ?? eng}
+                  </option>
+                ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
+              <ChevronDown className="w-3.5 h-3.5" />
+            </div>
+          </div>
 
-          <select
-            aria-label="Sort games"
-            data-testid="sort-select"
-            value={sortBy}
-            onChange={(e) =>
-              setSortBy(e.target.value as "name-asc" | "name-desc" | "size-asc")
-            }
-            className="h-10 rounded-sm border border-white/10 bg-[#12151a] px-3 text-xs text-[#a2a5ad] focus:border-[#c7f36b] focus:outline-none"
-          >
-            <option value="name-asc">A–Z</option>
-            <option value="name-desc">Z–A</option>
-            <option value="size-asc">Smallest</option>
-          </select>
+          {/* Sorting Dropdown */}
+          <div className="relative">
+            <select
+              aria-label="Sort games"
+              data-testid="sort-select"
+              value={sortBy}
+              onChange={(e) =>
+                setSortBy(
+                  e.target.value as "popular" | "name-asc" | "name-desc" | "rating" | "size-asc"
+                )
+              }
+              className="appearance-none bg-surface-elevated border border-surface-border text-slate-300 text-xs rounded-lg pl-3 pr-8 py-1.5 hover:border-slate-500 focus:outline-none focus:border-slate-500 transition-colors cursor-pointer"
+            >
+              <option value="popular">Most Popular</option>
+              <option value="name-asc">A–Z</option>
+              <option value="name-desc">Z–A</option>
+              <option value="rating">Top Rated</option>
+              <option value="size-asc">Smallest</option>
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
+              <ChevronDown className="w-3.5 h-3.5" />
+            </div>
+          </div>
 
+          {/* Reset Filters Button */}
           {(searchQuery || selectedCategory !== "all" || selectedEngine !== "all") && (
             <button
               type="button"
               data-testid="reset-filters-button"
               onClick={resetFilters}
-              className="inline-flex h-10 items-center gap-1 px-3 text-xs font-medium text-[#8b93ff] transition hover:bg-white/5 hover:text-[#f4f1ea]"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-surface-elevated border border-surface-border hover:border-slate-500 transition-colors"
             >
-              <RotateCcw className="h-3 w-3" />
+              <RotateCcw className="w-3 h-3" />
               <span>Reset</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Subtle Count Summary */}
-      <div className="flex items-center justify-between font-mono text-xs text-[#6e737c]">
+      {/* Result Count Info */}
+      <div className="text-xs text-slate-400 font-medium flex items-center justify-between">
         <span data-testid="games-count-summary">
-          Showing           <strong className="font-medium text-[#c7f36b]">{filteredGames.length}</strong> of{" "}
-          {games.length} games
+          Showing <span className="text-slate-100 font-semibold">{filteredGames.length}</span>{" "}
+          of {games.length} games
         </span>
       </div>
 
-      {/* Game Cards Grid */}
+      {/* Games Card Grid */}
       {filteredGames.length > 0 ? (
         <div
           data-testid="games-grid"
-          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          data-purpose="games-grid"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
         >
           {filteredGames.map((game) => (
             <GameCard key={game.id} game={game} />
@@ -193,17 +271,17 @@ export function GameExplorer({
       ) : (
         <div
           data-testid="empty-results-state"
-          className="flex flex-col items-center justify-center border border-dashed border-white/15 py-20 text-center"
+          className="flex flex-col items-center justify-center border border-dashed border-surface-border rounded-xl py-20 px-4 text-center bg-surface-card"
         >
-          <Sparkles className="mb-3 h-8 w-8 text-[#c7f36b]" />
-          <h3 className="text-base font-semibold text-[#f4f1ea]">No matching games found</h3>
-          <p className="mt-1 max-w-sm text-xs text-[#a2a5ad]">
-            Try clearing your search or engine filter to see all available browser games.
+          <Sparkles className="mb-3 h-8 w-8 text-slate-400" />
+          <h3 className="text-base font-semibold text-white">No matching games found</h3>
+          <p className="mt-1 max-w-sm text-xs text-slate-400">
+            Try clearing your search query or engine filters to browse all community sandboxes.
           </p>
           <button
             type="button"
             onClick={resetFilters}
-            className="mt-4 inline-flex items-center gap-1.5 rounded-sm bg-[#c7f36b] px-4 py-2 text-xs font-semibold text-[#0b0c0f] hover:bg-[#f4f1ea]"
+            className="mt-4 inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 text-xs font-semibold text-slate-950 hover:bg-slate-200 transition-colors shadow-sm"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             <span>Reset Filters</span>

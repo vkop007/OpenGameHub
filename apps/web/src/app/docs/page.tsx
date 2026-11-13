@@ -1,7 +1,18 @@
 import React from "react";
 import Link from "next/link";
 import { MANIFEST_JSON_SCHEMA } from "@opengamehub/game-discovery";
-import { ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpen,
+  Layers,
+  ShieldCheck,
+  Terminal,
+  Cpu,
+  ChevronRight,
+  CheckCircle2,
+  FileCode,
+  AlertTriangle
+} from "lucide-react";
 
 export const metadata = {
   title: "Documentation — OpenGameHub",
@@ -11,135 +22,235 @@ export const metadata = {
 
 export default function DocsPage() {
   return (
-    <div className="mx-auto max-w-5xl space-y-16 px-4 py-16 sm:px-6 lg:px-8">
-      <header className="space-y-3">
-        <div className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#c7f36b]">
-          Documentation
-        </div>
-        <h1
-          data-testid="docs-heading"
-          className="text-5xl font-black tracking-[-0.05em] text-[#f4f1ea] sm:text-7xl"
-        >
-          Architecture & Developer Reference
-        </h1>
-        <p className="max-w-2xl text-base leading-relaxed text-[#a2a5ad]">
-          How OpenGameHub discovers, validates, builds, and sandboxes community browser games.
-        </p>
-      </header>
+    <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-24 space-y-8">
+      {/* Breadcrumbs */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-slate-400">
+        <Link href="/" className="hover:text-white transition-colors">
+          Home
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5 text-slate-600" />
+        <span className="text-white font-semibold">Docs</span>
+      </nav>
 
-      {/* Supported Engines & Build Adapters */}
-      <section className="grid gap-12 border-t border-white/10 pt-10 md:grid-cols-2">
-        <div className="space-y-3">
-          <h2 className="text-lg font-bold text-[#f4f1ea]">
-            Supported V1 Engines & Frameworks
-          </h2>
-          <p className="text-xs leading-relaxed text-[#a2a5ad]">
-            Detected automatically from <code>package.json</code> dependencies, Vite configs, and entry HTML/JS files:
-          </p>
-          <ul className="space-y-2 pt-1 text-xs leading-relaxed text-zinc-300">
-            <li>
-              <strong className="text-white">3D Engines:</strong> Three.js (<code>three</code>), React Three Fiber (<code>@react-three/fiber</code>), Babylon.js (<code>@babylonjs/core</code>), PlayCanvas (<code>playcanvas</code>)
-            </li>
-            <li>
-              <strong className="text-white">2D Engines:</strong> Phaser (<code>phaser</code>), PixiJS (<code>pixi.js</code>), HTML5 Canvas 2D
-            </li>
-            <li>
-              <strong className="text-white">Web Frameworks:</strong> Vanilla HTML/JS/TS, React + Vite, Vue + Vite, Svelte + Vite
-            </li>
-            <li>
-              <strong className="text-zinc-400">Excluded in V1:</strong> Unity WebGL, Godot Web, native binaries, and server-dependent backends.
-            </li>
-          </ul>
-        </div>
-
-        <div className="space-y-3">
-          <h2 className="text-lg font-bold text-[#f4f1ea]">Modular Build Adapters</h2>
-          <p className="text-xs leading-relaxed text-zinc-400">
-            Every supported project compiles through one of two isolated build adapters:
-          </p>
-          <div className="space-y-4 pt-1 text-xs leading-relaxed">
-            <div>
-              <div className="font-semibold text-white">1. Static HTML Adapter (<code>static</code>)</div>
-              <p className="mt-0.5 text-zinc-400">
-                Validates <code>index.html</code>, excludes dev config files, normalizes root-relative asset paths to <code>./</code>, and verifies all referenced files exist.
-              </p>
-            </div>
-            <div>
-              <div className="font-semibold text-white">2. Vite Build Adapter (<code>vite</code>)</div>
-              <p className="mt-0.5 text-zinc-400">
-                Builds Vite projects in an isolated temporary directory with relative base paths (<code>base: &quot;./&quot;</code>) and outputs static files to <code>/_games/&lt;id&gt;/&lt;version&gt;/</code>.
-              </p>
-            </div>
+      {/* Hero Header matching /games layout */}
+      <div className="flex flex-wrap justify-between items-start gap-4 pb-4 border-b border-surface-border">
+        <div className="flex min-w-72 flex-col gap-2 max-w-3xl">
+          <div className="inline-flex items-center gap-2 self-start px-2.5 py-1 rounded-md bg-surface-elevated border border-surface-border text-cyan-400 font-mono text-[11px] font-semibold uppercase tracking-wider">
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Developer Reference</span>
           </div>
-        </div>
-      </section>
-
-      {/* Folder, Asset & Security Rules */}
-      <section className="grid gap-8 border-t border-white/10 pt-10 sm:grid-cols-3">
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-bold text-white">Slug Naming</h3>
-          <p className="text-xs leading-relaxed text-zinc-400">
-            Folder names in <code>/games</code> must use lowercase kebab-case (<code>a-z0-9-</code>, 2–64 chars), e.g., <code>games/space-shooter/</code>.
-          </p>
-        </div>
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-bold text-white">Relative Asset Paths</h3>
-          <p className="text-xs leading-relaxed text-zinc-400">
-            Games run from <code>/_games/&lt;slug&gt;/&lt;version&gt;/index.html</code>. Always use relative paths like <code>./assets/sprite.png</code>.
-          </p>
-        </div>
-        <div className="space-y-1.5">
-          <h3 className="text-sm font-bold text-white">Sandboxed Iframe</h3>
-          <p className="text-xs leading-relaxed text-zinc-400">
-            Executed with <code>sandbox=&quot;allow-scripts allow-pointer-lock&quot;</code> and no <code>allow-same-origin</code> to isolate parent DOM and storage.
-          </p>
-        </div>
-      </section>
-
-      {/* Optional Manifest JSON Schema */}
-      <section className="space-y-3 border-t border-white/10 pt-10">
-        <h2 className="text-lg font-bold text-[#f4f1ea]">
-          Optional Manifest Schema (<code>opengamehub.json</code>)
-        </h2>
-        <p className="text-xs text-zinc-400">
-          <code>opengamehub.json</code> is optional. When provided, it is validated against this JSON schema. Custom shell commands are strictly forbidden.
-        </p>
-        <pre className="max-h-80 overflow-auto border border-white/10 bg-[#12151a] p-5 font-mono text-xs text-[#a2a5ad]">
-          {JSON.stringify(MANIFEST_JSON_SCHEMA, null, 2)}
-        </pre>
-      </section>
-
-      {/* Common Build Errors */}
-      <section className="space-y-4 border-t border-white/[0.06] pt-10">
-        <h2 className="text-lg font-bold text-white">Common Validation Errors</h2>
-        <dl className="divide-y divide-white/[0.06] text-xs">
-          <div className="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
-            <dt className="font-mono font-semibold text-rose-400">MISSING_ENTRY_HTML</dt>
-            <dd className="mt-1 text-zinc-400 sm:col-span-2 sm:mt-0">
-              Ensure <code>index.html</code> exists at the root of <code>games/&lt;your-game&gt;/index.html</code>.
-            </dd>
-          </div>
-          <div className="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
-            <dt className="font-mono font-semibold text-rose-400">MANIFEST_FORBIDDEN_COMMAND_KEY</dt>
-            <dd className="mt-1 text-zinc-400 sm:col-span-2 sm:mt-0">
-              Remove shell overrides such as <code>buildCommand</code> or <code>scripts</code> from <code>opengamehub.json</code>.
-            </dd>
-          </div>
-          <div className="py-3 sm:grid sm:grid-cols-3 sm:gap-4">
-            <dt className="font-mono font-semibold text-rose-400">Missing referenced assets</dt>
-            <dd className="mt-1 text-zinc-400 sm:col-span-2 sm:mt-0">
-              Verify every <code>&lt;script src=&quot;...&quot;&gt;</code> and <code>&lt;link href=&quot;...&quot;&gt;</code> points to an existing relative file inside your game folder.
-            </dd>
-          </div>
-        </dl>
-        <div className="pt-2">
-          <Link
-            href="/contribute"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-400 hover:text-indigo-300"
+          <h1
+            data-testid="docs-heading"
+            className="text-white text-3xl sm:text-5xl font-black leading-tight tracking-tight font-heading"
           >
-            <span>Copy the AI Game Migration Prompt</span>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
+            Architecture &amp; Developer Reference
+          </h1>
+          <p className="text-slate-400 text-sm sm:text-base font-normal leading-relaxed">
+            How OpenGameHub discovers, validates, builds, and sandboxes community browser games into self-contained static Web Worker &amp; WebGL/WebGPU bundles.
+          </p>
+        </div>
+
+        <div className="flex shrink-0 items-center justify-center gap-2 rounded-lg h-10 px-4 bg-surface-elevated border border-surface-border text-white text-xs font-bold font-mono">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400" />
+          <span>v2.4 Spec Verified</span>
+        </div>
+      </div>
+
+      {/* Supported Engines & Build Adapters (Matched Width & Equal Heights) */}
+      <section className="grid gap-6 md:grid-cols-2 items-stretch">
+        {/* Card 1: Supported Engines */}
+        <div className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 text-cyan-400">
+              <Cpu className="w-5 h-5" />
+              <h2 className="text-base font-bold text-white font-heading">
+                Supported V1 Engines &amp; Frameworks
+              </h2>
+            </div>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Detected automatically from <code>package.json</code> dependencies, Vite configs, and entry HTML/JS files:
+            </p>
+            <div className="space-y-3 pt-1 text-xs leading-relaxed text-slate-300">
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border">
+                <strong className="text-white block pb-1">3D WebGL / WebGPU Engines:</strong>
+                <span>Three.js (<code>three</code>), React Three Fiber (<code>@react-three/fiber</code>), Babylon.js (<code>@babylonjs/core</code>), PlayCanvas (<code>playcanvas</code>)</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border">
+                <strong className="text-white block pb-1">2D Sprite &amp; Physics Engines:</strong>
+                <span>Phaser (<code>phaser</code>), PixiJS (<code>pixi.js</code>), HTML5 Canvas 2D</span>
+              </div>
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border">
+                <strong className="text-white block pb-1">Modern UI &amp; App Frameworks:</strong>
+                <span>Vanilla HTML/JS/TS, React + Vite, Vue + Vite, Svelte + Vite</span>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 pt-3.5 border-t border-surface-border text-xs text-slate-500 flex items-center justify-between">
+            <span><strong className="text-slate-400">Excluded in V1:</strong> Unity WebGL, Godot Web, native binaries</span>
+            <span className="font-mono text-[11px] text-emerald-400">AUTO-DETECT</span>
+          </div>
+        </div>
+
+        {/* Card 2: Modular Build Adapters */}
+        <div className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 text-indigo-400">
+              <Layers className="w-5 h-5" />
+              <h2 className="text-base font-bold text-white font-heading">
+                Modular Build Adapters
+              </h2>
+            </div>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Every supported project compiles through one of two isolated build adapters:
+            </p>
+            <div className="space-y-3 pt-1 text-xs leading-relaxed">
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border">
+                <div className="font-semibold text-white block pb-1">1. Static HTML Adapter (<code>static</code>)</div>
+                <p className="text-slate-400">
+                  Validates <code>index.html</code>, excludes dev config files, normalizes root-relative asset paths to <code>./</code>, and verifies all referenced files exist.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border">
+                <div className="font-semibold text-white block pb-1">2. Vite Build Adapter (<code>vite</code>)</div>
+                <p className="text-slate-400">
+                  Builds Vite projects in an isolated temporary directory with relative base paths (<code>base: &quot;./&quot;</code>) and outputs static files to <code>/_games/&lt;id&gt;/&lt;version&gt;/</code>.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border">
+                <div className="font-semibold text-white block pb-1">3. Automated Sandbox Verification</div>
+                <p className="text-slate-400">
+                  Runs static asset checksum verification, script sanitization, and loads iframe without <code>allow-same-origin</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-5 pt-3.5 border-t border-surface-border text-xs text-slate-500 flex items-center justify-between">
+            <span><strong className="text-slate-400">Target Output:</strong> <code>public/_games/&lt;slug&gt;/&lt;version&gt;/</code></span>
+            <span className="font-mono text-[11px] text-cyan-400">ZERO DEPENDENCY</span>
+          </div>
+        </div>
+      </section>
+
+      {/* Folder, Asset & Security Rules (3 Cards - Equal Width & Height) */}
+      <section className="grid gap-6 border-t border-surface-border pt-8 sm:grid-cols-3 items-stretch">
+        <div className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-cyan-400 uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+              <span>Rule 01 / Naming</span>
+            </div>
+            <h3 className="text-base font-bold text-white font-heading">Slug Naming</h3>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Folder names in <code>/games</code> must use lowercase kebab-case (<code>a-z0-9-</code>, 2–64 characters), e.g., <code>games/tumble-club/</code>.
+            </p>
+          </div>
+          <div className="mt-5 pt-3 border-t border-surface-border text-[11px] font-mono text-slate-500">
+            Path: games/&lt;kebab-slug&gt;/
+          </div>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+              <span>Rule 02 / Bundling</span>
+            </div>
+            <h3 className="text-base font-bold text-white font-heading">Relative Asset Paths</h3>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Games run from <code>/_games/&lt;slug&gt;/&lt;version&gt;/index.html</code>. Always use relative paths like <code>./assets/sprite.png</code> rather than root-relative <code>/assets/</code>.
+            </p>
+          </div>
+          <div className="mt-5 pt-3 border-t border-surface-border text-[11px] font-mono text-slate-500">
+            Base: relative ./
+          </div>
+        </div>
+
+        <div className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-3">
+            <div className="inline-flex items-center gap-1.5 text-xs font-mono font-semibold text-indigo-400 uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+              <span>Rule 03 / Isolation</span>
+            </div>
+            <h3 className="text-base font-bold text-white font-heading">Sandboxed Iframe</h3>
+            <p className="text-xs leading-relaxed text-slate-400">
+              Executed with <code>sandbox=&quot;allow-scripts allow-pointer-lock&quot;</code> and strictly no <code>allow-same-origin</code> to fully isolate the parent DOM and tokens.
+            </p>
+          </div>
+          <div className="mt-5 pt-3 border-t border-surface-border text-[11px] font-mono text-slate-500">
+            Strict Zero-Trust DOM
+          </div>
+        </div>
+      </section>
+
+      {/* Manifest Schema & Common Validation Errors (2 Equal-Height Columns) */}
+      <section className="grid gap-6 border-t border-surface-border pt-8 lg:grid-cols-2 items-stretch">
+        {/* Left Col: Manifest Schema */}
+        <div id="schema" className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5 text-cyan-400">
+                <FileCode className="w-5 h-5" />
+                <h2 className="text-base font-bold text-white font-heading">
+                  Manifest Schema (<code>opengamehub.json</code>)
+                </h2>
+              </div>
+              <span className="font-mono text-[10px] text-slate-400 px-2 py-0.5 rounded bg-surface-elevated border border-surface-border">OPTIONAL</span>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              <code>opengamehub.json</code> is validated against this JSON schema during <code>pnpm game:validate</code>. Custom shell commands are strictly forbidden.
+            </p>
+            <pre className="h-72 overflow-auto rounded-xl border border-surface-border bg-surface-lowest p-4 font-mono text-xs text-cyan-300">
+              {JSON.stringify(MANIFEST_JSON_SCHEMA, null, 2)}
+            </pre>
+          </div>
+          <div className="mt-4 pt-3 border-t border-surface-border text-xs text-slate-500">
+            Validated by <code>@opengamehub/game-discovery</code>
+          </div>
+        </div>
+
+        {/* Right Col: Common Validation Errors */}
+        <div className="p-6 rounded-2xl bg-surface-card border border-surface-border flex flex-col justify-between shadow-card h-full">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5 text-amber-400">
+              <AlertTriangle className="w-5 h-5" />
+              <h2 className="text-base font-bold text-white font-heading">
+                Common Validation Errors &amp; Fixes
+              </h2>
+            </div>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Automated CI validates every PR. Here are the top 3 issues detected and their immediate remedies:
+            </p>
+            <div className="space-y-3">
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border space-y-1">
+                <div className="font-mono font-semibold text-rose-400 text-xs">MISSING_ENTRY_HTML</div>
+                <p className="text-slate-400 text-xs">
+                  Ensure <code>index.html</code> exists at the root of <code>games/&lt;your-game&gt;/index.html</code>.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border space-y-1">
+                <div className="font-mono font-semibold text-rose-400 text-xs">MANIFEST_FORBIDDEN_COMMAND_KEY</div>
+                <p className="text-slate-400 text-xs">
+                  Remove shell overrides such as <code>buildCommand</code> or <code>scripts</code> from <code>opengamehub.json</code>.
+                </p>
+              </div>
+              <div className="p-3.5 rounded-xl bg-surface-elevated border border-surface-border space-y-1">
+                <div className="font-mono font-semibold text-rose-400 text-xs">Missing referenced assets</div>
+                <p className="text-slate-400 text-xs">
+                  Verify every <code>&lt;script src=&quot;...&quot;&gt;</code> and <code>&lt;link href=&quot;...&quot;&gt;</code> points to an existing relative file inside your game folder.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-4 pt-3 border-t border-surface-border flex items-center justify-between">
+            <Link
+              href="/contribute"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              <span>Copy the AI Game Migration Prompt</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+            <span className="font-mono text-[11px] text-emerald-400">CI AUTOMATED</span>
+          </div>
         </div>
       </section>
     </div>

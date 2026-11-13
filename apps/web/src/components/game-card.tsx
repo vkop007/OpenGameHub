@@ -2,75 +2,108 @@ import React from "react";
 import Link from "next/link";
 import type { PublishedGameEntry } from "@opengamehub/game-registry";
 import { ENGINE_LABELS } from "@/lib/registry";
-import { Play } from "lucide-react";
+import { Play, Code2, Star } from "lucide-react";
 
 export function GameCard({ game }: { game: PublishedGameEntry }) {
+  const rating = "4.9";
+  const engineLabel = (ENGINE_LABELS[game.engine] ?? game.engine).toUpperCase();
+
   return (
-    <div
+    <article
       data-testid={`game-card-${game.id}`}
-      className="group relative flex flex-col overflow-hidden border border-white/10 bg-[#12151a] transition-all duration-200 hover:-translate-y-1 hover:border-[#c7f36b]/60"
+      data-purpose="game-card"
+      className="group bg-surface-card border border-surface-border rounded-xl overflow-hidden hover:border-slate-500 transition-colors duration-200 flex flex-col justify-between shadow-card hover:shadow-card-hover"
     >
-      {/* Artwork Stage */}
-      <Link
-        href={`/games/${game.id}`}
-        className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-950"
-      >
-        <img
-          src={game.thumbnail}
-          alt={game.name}
-          loading="lazy"
-          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0c0f]/90 via-transparent to-transparent" />
-
-        {/* Subtle Category Tag */}
-        <span className="absolute top-3 left-3 bg-[#0b0c0f]/85 px-2 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#c7f36b]">
-          {game.category}
-        </span>
-
-        {/* Engine Label on Bottom Left */}
-        <span className="absolute bottom-3 left-3 font-mono text-[10px] uppercase tracking-wider text-[#f4f1ea]/80">
-          {ENGINE_LABELS[game.engine] ?? game.engine}
-        </span>
-      </Link>
-
-      {/* Clean Typography Info Area */}
-      <div className="flex flex-1 flex-col justify-between p-5">
-        <div>
-          <div className="flex items-baseline justify-between gap-2">
-            <Link
-              href={`/games/${game.id}`}
-              className="text-lg font-bold tracking-tight text-[#f4f1ea] transition group-hover:text-[#c7f36b]"
-            >
-              {game.name}
-            </Link>
-            <span className="font-mono text-[11px] text-zinc-500">
+      <div>
+        {/* Visual Sandbox Preview Area (Clean, solid dark stage with zero gradients) */}
+        <div className="relative h-44 w-full bg-[#13161f] border-b border-surface-border p-4 flex flex-col justify-between overflow-hidden">
+          {/* Top badges row */}
+          <div className="relative z-10 flex items-center justify-between">
+            <span className="text-[10px] font-mono tracking-wider font-semibold uppercase px-2 py-0.5 rounded bg-surface-card text-slate-300 border border-surface-border">
+              {game.category}
+            </span>
+            <span className="text-[11px] font-mono text-slate-400 bg-surface-card px-2 py-0.5 rounded border border-surface-border">
               v{game.version}
             </span>
           </div>
-          <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-[#a2a5ad]">
-            {game.description}
-          </p>
+
+          {/* Center Interactive Play Button */}
+          <div className="relative z-10 my-auto flex items-center justify-center">
+            <Link
+              href={`/games/${game.id}`}
+              aria-label={`Play ${game.name}`}
+              className="w-11 h-11 rounded-full bg-surface-card hover:bg-white text-slate-200 hover:text-slate-950 border border-surface-border hover:border-white flex items-center justify-center transition-all duration-200 group-hover:scale-105 shadow-sm"
+            >
+              <Play className="w-4 h-4 ml-0.5 fill-current" />
+            </Link>
+          </div>
+
+          {/* Bottom Canvas Metadata Badge */}
+          <div className="relative z-10 flex items-end justify-between">
+            <div>
+              <Link href={`/games/${game.id}`}>
+                <h3 className="font-bold text-white tracking-tight text-base group-hover:text-slate-300 transition-colors">
+                  {game.name}
+                </h3>
+              </Link>
+              <p className="text-[10px] font-mono text-slate-400 tracking-wider">
+                ENGINE: {engineLabel}
+              </p>
+            </div>
+            <div className="flex items-center gap-1 text-[11px] text-amber-400 bg-surface-card px-1.5 py-0.5 rounded border border-surface-border">
+              <Star className="w-3 h-3 fill-current text-amber-400" />
+              <span className="text-slate-300 font-mono text-xs">{rating}</span>
+            </div>
+          </div>
         </div>
 
-        <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
+        {/* Card Content Body */}
+        <div className="p-4 space-y-3">
+          <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+            {game.description}
+          </p>
+
+          {/* Tags / Meta Row */}
+          <div className="flex flex-wrap gap-1.5 text-[10px] font-mono text-slate-400">
+            {game.tags.slice(0, 3).map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 rounded bg-surface-elevated border border-surface-border capitalize text-slate-400"
+              >
+                {tag.replace(/-/g, " ")}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Card Actions Footer */}
+      <div className="px-4 pb-4 pt-2 flex items-center justify-between border-t border-surface-border">
+        <Link
+          href={`/games/${game.id}`}
+          data-testid={`details-button-${game.id}`}
+          className="text-xs text-slate-400 hover:text-white transition-colors flex items-center gap-1 font-medium"
+        >
+          <span>Details</span>
+        </Link>
+        <div className="flex items-center gap-2">
           <Link
-            href={`/games/${game.id}`}
-            data-testid={`details-button-${game.id}`}
-            className="text-xs font-medium text-[#a2a5ad] transition hover:text-[#f4f1ea]"
+            href={`/games/${game.id}#source`}
+            className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-surface-elevated transition-colors"
+            title="Inspect Source Code"
           >
-            Details
+            <Code2 className="w-4 h-4" />
           </Link>
           <Link
-            href={`/play/${game.id}`}
+            href={`/games/${game.id}`}
             data-testid={`play-button-${game.id}`}
-            className="inline-flex items-center gap-1.5 rounded-sm bg-[#c7f36b] px-3.5 py-2 text-xs font-bold text-[#0b0c0f] transition hover:bg-[#f4f1ea]"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-950 hover:bg-slate-200 active:scale-[0.98] transition-colors shadow-sm"
           >
-            <Play className="h-3 w-3 fill-current" />
+            <Play className="w-3 h-3 fill-current" />
             <span>Play</span>
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }

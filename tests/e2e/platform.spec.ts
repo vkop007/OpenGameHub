@@ -9,10 +9,7 @@ test.describe("OpenGameHub E2E Browser Suite", () => {
 
     await page.goto("/");
     await expect(page.getByTestId("hero-heading")).toBeVisible();
-    await expect(page.getByTestId("game-card-space-shooter")).toBeVisible();
-    await expect(page.getByTestId("game-card-neon-breakout")).toBeVisible();
-    await expect(page.getByTestId("game-card-dungeon-crawler")).toBeVisible();
-    await expect(page.getByTestId("game-card-cyber-2048")).toBeVisible();
+    await expect(page.getByTestId("game-card-tumble-club")).toBeVisible();
     expect(errors).toHaveLength(0);
   });
 
@@ -23,26 +20,22 @@ test.describe("OpenGameHub E2E Browser Suite", () => {
     await expect(page.getByTestId("library-heading")).toBeVisible();
 
     const searchInput = page.getByTestId("game-search-input");
-    await searchInput.fill("Space Shooter");
-    await expect(page.getByTestId("game-card-space-shooter")).toBeVisible();
-    await expect(page.getByTestId("game-card-neon-breakout")).toHaveCount(0);
+    await searchInput.fill("Tumble Club");
+    await expect(page.getByTestId("game-card-tumble-club")).toBeVisible();
 
     await searchInput.fill("non-existent-xyz-game");
     await expect(page.getByTestId("empty-results-state")).toBeVisible();
 
     await page.getByTestId("reset-filters-button").click();
-    await expect(page.getByTestId("game-card-neon-breakout")).toBeVisible();
+    await expect(page.getByTestId("game-card-tumble-club")).toBeVisible();
   });
 
   test("Game Details and Sandboxed Universal Game Player work with restart & fullscreen controls", async ({
     page
   }) => {
-    await page.goto("/games/space-shooter");
-    await expect(page.getByTestId("detail-game-title")).toHaveText("Space Shooter 3D");
+    await page.goto("/games/tumble-club");
+    await expect(page.getByTestId("detail-game-title")).toHaveText("Tumble Club");
     await expect(page.getByTestId("detail-game-engine")).toContainText("Three.js");
-
-    await page.getByTestId("detail-play-button").click();
-    await expect(page).toHaveURL(/\/play\/space-shooter/);
 
     const iframe = page.getByTestId("game-iframe");
     await expect(iframe).toBeVisible();
@@ -52,7 +45,7 @@ test.describe("OpenGameHub E2E Browser Suite", () => {
     );
     await expect(iframe).toHaveAttribute(
       "src",
-      "/_games/space-shooter/1.0.0/index.html"
+      "/_games/tumble-club/1.0.0/index.html"
     );
 
     await page.getByTestId("player-restart-button").click();

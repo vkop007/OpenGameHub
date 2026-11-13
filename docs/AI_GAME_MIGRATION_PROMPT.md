@@ -85,5 +85,5 @@ Do NOT add custom shell commands (`buildCommand`, `scripts`, `exec`) to `opengam
    - Copy folder to `games/<game-slug>/`
    - Run `pnpm game:validate <game-slug>`
    - Run `pnpm game:build <game-slug>`
-   - Run `pnpm dev` and test at `http://localhost:3000/play/<game-slug>`
+   - Run `pnpm dev` and test at `http://localhost:3000/games/<game-slug>`
 ```
