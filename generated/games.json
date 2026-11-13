@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-13T11:21:06.429Z",
+  "generatedAt": "2026-11-13T12:12:12.468Z",
   "games": [
     {
       "id": "tumble-club",
@@ -17,7 +17,7 @@
         "racing",
         "threejs"
       ],
-      "thumbnail": "/games-thumbnails/tumble-club.svg",
+      "thumbnail": "/games-thumbnails/tumble-club.png",
       "playUrl": "/_games/tumble-club/1.0.0/index.html",
       "version": "1.0.0",
       "status": "published",
@@ -29,7 +29,7 @@
         "Enter to Start or Restart"
       ],
       "aspectRatio": "16:9",
-      "bundleSizeBytes": 953171
+      "bundleSizeBytes": 2294309
     }
   ],
   "failedGames": []

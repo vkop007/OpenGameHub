@@ -8,6 +8,7 @@
   "buildAdapter": "vite",
   "entry": "index.html",
   "category": "action",
+  "thumbnail": "thumbnail.png",
   "tags": ["3d", "arcade", "obstacle-course", "racing", "threejs"],
   "controls": [
     "WASD / Arrow Keys to Move",

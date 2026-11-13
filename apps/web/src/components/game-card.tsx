@@ -2,10 +2,9 @@ import React from "react";
 import Link from "next/link";
 import type { PublishedGameEntry } from "@opengamehub/game-registry";
 import { ENGINE_LABELS } from "@/lib/registry";
-import { Play, Code2, Star } from "lucide-react";
+import { Play, Code2 } from "lucide-react";
 
 export function GameCard({ game }: { game: PublishedGameEntry }) {
-  const rating = "4.9";
   const engineLabel = (ENGINE_LABELS[game.engine] ?? game.engine).toUpperCase();
 
   return (
@@ -15,8 +14,20 @@ export function GameCard({ game }: { game: PublishedGameEntry }) {
       className="group bg-surface-card border border-surface-border rounded-xl overflow-hidden hover:border-slate-500 transition-colors duration-200 flex flex-col justify-between shadow-card hover:shadow-card-hover"
     >
       <div>
-        {/* Visual Sandbox Preview Area (Clean, solid dark stage with zero gradients) */}
+        {/* Visual Sandbox Preview Area */}
         <div className="relative h-44 w-full bg-[#13161f] border-b border-surface-border p-4 flex flex-col justify-between overflow-hidden">
+          {/* Game Thumbnail Image Background */}
+          {game.thumbnail && (
+            <img
+              src={game.thumbnail}
+              alt={`${game.name} preview`}
+              className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-95 group-hover:scale-105 transition-all duration-300"
+              loading="lazy"
+            />
+          )}
+          {/* Subtle dark backdrop overlay to preserve crisp text and button contrast */}
+          <div className="absolute inset-0 bg-slate-950/35 pointer-events-none" />
+
           {/* Top badges row */}
           <div className="relative z-10 flex items-center justify-between">
             <span className="text-[10px] font-mono tracking-wider font-semibold uppercase px-2 py-0.5 rounded bg-surface-card text-slate-300 border border-surface-border">
@@ -50,10 +61,9 @@ export function GameCard({ game }: { game: PublishedGameEntry }) {
                 ENGINE: {engineLabel}
               </p>
             </div>
-            <div className="flex items-center gap-1 text-[11px] text-amber-400 bg-surface-card px-1.5 py-0.5 rounded border border-surface-border">
-              <Star className="w-3 h-3 fill-current text-amber-400" />
-              <span className="text-slate-300 font-mono text-xs">{rating}</span>
-            </div>
+            <span className="text-[10px] font-mono text-slate-400 bg-surface-card px-2 py-0.5 rounded border border-surface-border">
+              @{game.author}
+            </span>
           </div>
         </div>
 

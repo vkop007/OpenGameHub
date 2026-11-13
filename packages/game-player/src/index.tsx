@@ -317,20 +317,29 @@ export function UniversalGamePlayer({
           {isLoading && (
             <div
               data-testid="player-loading-overlay"
-              className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[#0a0b10] text-slate-300"
+              className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-[#0a0b10] text-slate-300 overflow-hidden"
             >
-              <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
-              <p className="text-xs font-mono tracking-wide text-slate-400">
-                Initializing sandbox for {game.name}...
-              </p>
-              {loadingProgress !== null && (
-                <div className="h-1 w-40 overflow-hidden rounded-full bg-[#161722]">
-                  <div
-                    className="h-full bg-cyan-400 transition-all duration-200"
-                    style={{ width: `${loadingProgress}%` }}
-                  />
-                </div>
+              {game.thumbnail && (
+                <img
+                  src={game.thumbnail}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm pointer-events-none"
+                />
               )}
+              <div className="relative z-10 flex flex-col items-center gap-3">
+                <Loader2 className="h-8 w-8 animate-spin text-cyan-400" />
+                <p className="text-xs font-mono tracking-wide text-slate-400">
+                  Initializing sandbox for {game.name}...
+                </p>
+                {loadingProgress !== null && (
+                  <div className="h-1 w-40 overflow-hidden rounded-full bg-[#161722]">
+                    <div
+                      className="h-full bg-cyan-400 transition-all duration-200"
+                      style={{ width: `${loadingProgress}%` }}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           )}
 

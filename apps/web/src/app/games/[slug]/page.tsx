@@ -11,11 +11,9 @@ import { UniversalGamePlayer } from "@opengamehub/game-player";
 import {
   ArrowLeft,
   Play,
-  Star,
   Share2,
   GitFork,
   CheckCircle2,
-  Terminal,
   ShieldCheck,
   Code2,
   Cpu,
@@ -83,16 +81,6 @@ export default async function GameDetailsPage({
             type="button"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card hover:bg-surface-high border border-surface-border text-slate-200 text-xs font-medium transition-colors"
           >
-            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-            <span>Star</span>
-            <span className="ml-1 px-1.5 py-0.2 rounded bg-surface-container text-slate-400 font-mono text-[11px]">
-              1.4k
-            </span>
-          </button>
-          <button
-            type="button"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-card hover:bg-surface-high border border-surface-border text-slate-200 text-xs font-medium transition-colors"
-          >
             <Share2 className="w-3.5 h-3.5 text-slate-400" />
             <span>Share</span>
           </button>
@@ -120,8 +108,12 @@ export default async function GameDetailsPage({
       <section className="w-full bg-surface-card border border-surface-border p-6 rounded-2xl shadow-card">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 rounded-xl bg-surface-elevated border border-surface-border flex-shrink-0 flex items-center justify-center text-white">
-              <Gamepad2 className="w-7 h-7" />
+            <div className="w-14 h-14 rounded-xl bg-surface-elevated border border-surface-border flex-shrink-0 flex items-center justify-center text-white overflow-hidden">
+              {game.thumbnail ? (
+                <img src={game.thumbnail} alt={game.name} className="w-full h-full object-cover" />
+              ) : (
+                <Gamepad2 className="w-7 h-7" />
+              )}
             </div>
             <div className="flex flex-col gap-1.5">
               <div className="flex items-center gap-2.5 flex-wrap">
@@ -166,27 +158,6 @@ export default async function GameDetailsPage({
 
           {/* Key Stats Counters & Play Action */}
           <div className="flex items-center gap-3 flex-wrap self-start lg:self-auto">
-            <div className="px-4 py-2.5 rounded-xl bg-surface-container border border-surface-border flex flex-col justify-center min-w-[130px]">
-              <span className="font-mono text-[10px] uppercase text-slate-400 tracking-wider font-semibold">
-                Player Rating
-              </span>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-                <span className="font-heading font-bold text-white text-base">4.92</span>
-                <span className="text-slate-400 text-xs font-mono">/ 5 (1.2k)</span>
-              </div>
-            </div>
-
-            <div className="px-4 py-2.5 rounded-xl bg-surface-container border border-surface-border flex flex-col justify-center min-w-[130px]">
-              <span className="font-mono text-[10px] uppercase text-slate-400 tracking-wider font-semibold">
-                Total Plays
-              </span>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="font-heading font-bold text-cyan-400 text-base">28,490</span>
-                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-              </div>
-            </div>
-
             <div className="px-4 py-2.5 rounded-xl bg-surface-container border border-surface-border flex flex-col justify-center min-w-[110px]">
               <span className="font-mono text-[10px] uppercase text-slate-400 tracking-wider font-semibold">
                 Bundle Size
@@ -194,6 +165,17 @@ export default async function GameDetailsPage({
               <div className="flex items-center gap-1 mt-0.5">
                 <span className="font-mono font-bold text-slate-200 text-base">
                   {bundleSizeMb} MB
+                </span>
+              </div>
+            </div>
+
+            <div className="px-4 py-2.5 rounded-xl bg-surface-container border border-surface-border flex flex-col justify-center min-w-[120px]">
+              <span className="font-mono text-[10px] uppercase text-slate-400 tracking-wider font-semibold">
+                Sandbox Tier
+              </span>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <span className="font-mono font-bold text-emerald-400 text-sm">
+                  Isolated WebGL
                 </span>
               </div>
             </div>
@@ -389,92 +371,10 @@ export default async function GameDetailsPage({
             </div>
           </section>
 
-          {/* Community Reviews */}
-          <section className="bg-surface-card border border-surface-border p-6 rounded-2xl flex flex-col gap-5 shadow-card">
-            <div className="flex items-center justify-between border-b border-surface-border pb-4">
-              <h2 className="font-heading text-lg text-white font-bold tracking-tight flex items-center gap-2">
-                <Star className="w-5 h-5 text-amber-400" />
-                Community Reviews
-              </h2>
-              <span className="text-slate-400 text-xs">Showing verified player feedback</span>
-            </div>
-
-            {/* Review Items */}
-            <div className="flex flex-col gap-3">
-              <div className="p-4 rounded-xl bg-surface-container border border-surface-border flex flex-col gap-2">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-full bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center font-bold text-indigo-300 font-mono text-[11px]">
-                      MR
-                    </span>
-                    <span className="font-heading text-xs font-bold text-white">
-                      @marcus_render
-                    </span>
-                    <span className="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[10px] font-medium">
-                      RUNS 60 FPS
-                    </span>
-                  </div>
-                  <div className="flex items-center text-amber-400 text-xs gap-0.5">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} className="w-3 h-3 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                <p className="font-sans text-xs text-slate-300 leading-relaxed">
-                  Remarkable performance in the sandboxed iframe. Fluid 60 FPS constraint on Apple
-                  Silicon with zero audio desync!
-                </p>
-              </div>
-
-              <div className="p-4 rounded-xl bg-surface-container border border-surface-border flex flex-col gap-2">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-7 h-7 rounded-full bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center font-bold text-cyan-400 font-mono text-[11px]">
-                      JL
-                    </span>
-                    <span className="font-heading text-xs font-bold text-white">
-                      @jess_leveldesign
-                    </span>
-                    <span className="px-2 py-0.5 rounded bg-surface-high border border-surface-border text-slate-400 font-mono text-[10px] font-medium">
-                      GAMEPAD TESTED
-                    </span>
-                  </div>
-                  <div className="flex items-center text-amber-400 text-xs gap-0.5">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} className="w-3 h-3 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                <p className="font-sans text-xs text-slate-300 leading-relaxed">
-                  Controls feel super responsive with the Gamepad API. Outstanding open-source
-                  reference for browser game developers.
-                </p>
-              </div>
-            </div>
-          </section>
         </div>
 
         {/* RIGHT SIDEBAR: 4 cols */}
         <aside className="lg:col-span-4 flex flex-col gap-8">
-          {/* CLI Run Command */}
-          <div className="bg-surface-card border border-surface-border p-5 rounded-2xl flex flex-col gap-3 shadow-card">
-            <div className="flex items-center justify-between pb-2 border-b border-surface-border">
-              <span className="font-heading text-xs text-white font-bold uppercase tracking-wider flex items-center gap-2">
-                <Terminal className="w-4 h-4 text-cyan-400" />
-                Run Locally via CLI
-              </span>
-              <span className="text-emerald-400 font-mono text-[11px] bg-emerald-500/10 border border-emerald-500/25 px-1.5 py-0.2 rounded font-semibold">
-                v2.4 CLI
-              </span>
-            </div>
-            <p className="font-sans text-xs text-slate-400 leading-relaxed">
-              Instantly mirror and boot this game sandbox in your local dev environment:
-            </p>
-            <div className="flex items-center justify-between bg-surface-lowest border border-surface-border p-2.5 rounded-lg font-mono text-xs text-cyan-400 overflow-x-auto">
-              <code className="select-all">npx opengamehub run {game.id}</code>
-            </div>
-          </div>
-
           {/* Sandbox Telemetry & Security */}
           <div className="bg-surface-card border border-surface-border p-5 rounded-2xl flex flex-col gap-4 shadow-card">
             <div className="flex items-center gap-2 pb-2 border-b border-surface-border">
@@ -582,7 +482,7 @@ export default async function GameDetailsPage({
                         {rel.description}
                       </span>
                       <span className="text-cyan-400 font-mono text-[10px] mt-0.5">
-                        {ENGINE_LABELS[rel.engine] ?? rel.engine} • 4.9★
+                        {ENGINE_LABELS[rel.engine] ?? rel.engine}
                       </span>
                     </div>
                   </Link>

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import type { PublishedGameEntry } from "@opengamehub/game-registry";
 import { ENGINE_LABELS } from "@/lib/registry";
 import { GameCard } from "@/components/game-card";
@@ -12,7 +13,9 @@ import {
   CheckCircle2,
   Gamepad,
   ShieldCheck,
-  ChevronDown
+  ChevronDown,
+  X,
+  Shuffle
 } from "lucide-react";
 
 export interface GameExplorerProps {
@@ -28,25 +31,39 @@ export function GameExplorer({
   initialEngine = "all",
   showTelemetryPills = false
 }: GameExplorerProps) {
+  const router = useRouter();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [selectedEngine, setSelectedEngine] = useState(initialEngine);
-  const [sortBy, setSortBy] = useState<"popular" | "name-asc" | "name-desc" | "rating" | "size-asc">("popular");
+  const [sortBy, setSortBy] = useState<"popular" | "name-asc" | "name-desc" | "size-asc">("popular");
 
-  // Dynamic categories from games plus common categories
+  // Global shortcut to focus search input (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Dynamic categories from games plus common standard categories
   const categories = useMemo(() => {
     const defaultCats = ["all", "action", "arcade", "puzzle", "3d", "multiplayer", "experimental"];
     const gameCats = new Set<string>();
     for (const g of games) {
       if (g.category) gameCats.add(g.category.toLowerCase());
       for (const t of g.tags) {
-        if (["3d", "arcade", "puzzle", "action", "multiplayer"].includes(t.toLowerCase())) {
+        if (["3d", "arcade", "puzzle", "action", "multiplayer", "experimental"].includes(t.toLowerCase())) {
           gameCats.add(t.toLowerCase());
         }
       }
     }
-    const combined = Array.from(new Set([...defaultCats, ...Array.from(gameCats)]));
-    return combined;
+    return Array.from(new Set([...defaultCats, ...Array.from(gameCats)]));
   }, [games]);
 
   const engines = useMemo(() => {
@@ -87,6 +104,15 @@ export function GameExplorer({
     return list;
   }, [games, searchQuery, selectedCategory, selectedEngine, sortBy]);
 
+  const getCategoryCount = (cat: string) => {
+    if (cat === "all") return games.length;
+    return games.filter(
+      (g) =>
+        g.category?.toLowerCase() === cat ||
+        g.tags.some((t) => t.toLowerCase() === cat)
+    ).length;
+  };
+
   const resetFilters = () => {
     setSearchQuery("");
     setSelectedCategory("all");
@@ -94,11 +120,22 @@ export function GameExplorer({
     setSortBy("popular");
   };
 
+  const handleRandomGame = () => {
+    if (games.length === 0) return;
+    const pool = filteredGames.length > 0 ? filteredGames : games;
+    const random = pool[Math.floor(Math.random() * pool.length)];
+    if (random) {
+      router.push(`/games/${random.id}`);
+    }
+  };
+
   const getCategoryLabel = (cat: string) => {
     if (cat === "all") return "All Games";
     if (cat === "3d") return "3D WebGL";
     return cat.charAt(0).toUpperCase() + cat.slice(1);
   };
+
+  const isFiltered = searchQuery !== "" || selectedCategory !== "all" || selectedEngine !== "all" || sortBy !== "popular";
 
   return (
     <div className="space-y-6">
@@ -124,55 +161,52 @@ export function GameExplorer({
         </div>
       )}
 
-      {/* Controls & Filter Toolbar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-        {/* Category Filter Tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-2 lg:pb-0 no-scrollbar">
-          {categories.map((cat) => {
-            const isActive = selectedCategory === cat;
-            return (
-              <button
-                key={cat}
-                type="button"
-                data-testid={`category-pill-${cat}`}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors ${
-                  isActive
-                    ? "bg-white text-slate-950 shadow-sm"
-                    : "text-slate-400 hover:text-white hover:bg-surface-elevated border border-transparent"
-                }`}
-              >
-                {getCategoryLabel(cat)}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Filter Dropdowns & Live Search Input */}
-        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
-          {/* Search games or engines */}
-          <div className="relative w-full sm:w-64">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
-              <Search className="w-3.5 h-3.5" />
+      {/* SECTION 1: SEARCH & TOOLBAR (Separated Discovery Bar) */}
+      <div className="bg-surface-card border border-surface-border rounded-xl p-3 sm:p-4 space-y-3">
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3">
+          {/* Main Search Input */}
+          <div className="relative flex-1">
+            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <Search className="w-4 h-4" />
             </div>
             <input
+              ref={searchInputRef}
               type="text"
               data-testid="game-search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search games or engines..."
-              className="w-full pl-8 pr-3 py-1.5 bg-surface-elevated border border-surface-border rounded-lg text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-500 transition-colors"
+              placeholder="Search by title, engine, tag, or author..."
+              className="w-full pl-10 pr-20 py-2.5 bg-surface-elevated border border-surface-border rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-all font-body-md"
             />
+            <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center gap-1.5">
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="p-1 rounded text-slate-400 hover:text-white hover:bg-surface-card transition-colors"
+                  title="Clear search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+              <kbd
+                onClick={() => searchInputRef.current?.focus()}
+                className="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-surface-card text-slate-400 border border-surface-border cursor-pointer select-none"
+              >
+                ⌘K
+              </kbd>
+            </div>
           </div>
 
-          {/* Category Filter Dropdown */}
-          <div className="relative">
+          {/* Controls: Engine Filter, Sort, Random Action, Reset */}
+          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
+            {/* Screen-reader accessible Category Filter Select (Keeps test & a11y compatibility without visual duplication) */}
             <select
               aria-label="Filter by category"
               data-testid="category-filter-select"
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="appearance-none bg-surface-elevated border border-surface-border text-slate-300 text-xs rounded-lg pl-3 pr-8 py-1.5 hover:border-slate-500 focus:outline-none focus:border-slate-500 transition-colors cursor-pointer"
+              className="sr-only"
             >
               {categories.map((cat) => (
                 <option key={cat} value={cat}>
@@ -180,81 +214,120 @@ export function GameExplorer({
                 </option>
               ))}
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
-              <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
-                <path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
-              </svg>
-            </div>
-          </div>
 
-          {/* Engine Filter Dropdown */}
-          <div className="relative">
-            <select
-              aria-label="Filter by engine"
-              data-testid="engine-filter-select"
-              value={selectedEngine}
-              onChange={(e) => setSelectedEngine(e.target.value)}
-              className="appearance-none bg-surface-elevated border border-surface-border text-slate-300 text-xs rounded-lg pl-3 pr-8 py-1.5 hover:border-slate-500 focus:outline-none focus:border-slate-500 transition-colors cursor-pointer"
-            >
-              <option value="all">All Engines</option>
-              {engines
-                .filter((e) => e !== "all")
-                .map((eng) => (
-                  <option key={eng} value={eng}>
-                    {ENGINE_LABELS[eng] ?? eng}
-                  </option>
-                ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
-              <ChevronDown className="w-3.5 h-3.5" />
+            {/* Engine Filter Dropdown */}
+            <div className="relative">
+              <select
+                aria-label="Filter by engine"
+                data-testid="engine-filter-select"
+                value={selectedEngine}
+                onChange={(e) => setSelectedEngine(e.target.value)}
+                className="appearance-none bg-surface-elevated border border-surface-border text-slate-200 text-xs font-medium rounded-lg h-10 pl-3 pr-8 hover:border-slate-500 focus:outline-none focus:border-slate-400 transition-colors cursor-pointer"
+              >
+                <option value="all">All Engines</option>
+                {engines
+                  .filter((e) => e !== "all")
+                  .map((eng) => (
+                    <option key={eng} value={eng}>
+                      {ENGINE_LABELS[eng] ?? eng}
+                    </option>
+                  ))}
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                <ChevronDown className="w-3.5 h-3.5" />
+              </div>
             </div>
-          </div>
 
-          {/* Sorting Dropdown */}
-          <div className="relative">
-            <select
-              aria-label="Sort games"
-              data-testid="sort-select"
-              value={sortBy}
-              onChange={(e) =>
-                setSortBy(
-                  e.target.value as "popular" | "name-asc" | "name-desc" | "rating" | "size-asc"
-                )
-              }
-              className="appearance-none bg-surface-elevated border border-surface-border text-slate-300 text-xs rounded-lg pl-3 pr-8 py-1.5 hover:border-slate-500 focus:outline-none focus:border-slate-500 transition-colors cursor-pointer"
-            >
-              <option value="popular">Most Popular</option>
-              <option value="name-asc">A–Z</option>
-              <option value="name-desc">Z–A</option>
-              <option value="rating">Top Rated</option>
-              <option value="size-asc">Smallest</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-500">
-              <ChevronDown className="w-3.5 h-3.5" />
+            {/* Sort Dropdown */}
+            <div className="relative">
+              <select
+                aria-label="Sort games"
+                data-testid="sort-select"
+                value={sortBy}
+                onChange={(e) =>
+                  setSortBy(
+                    e.target.value as "popular" | "name-asc" | "name-desc" | "size-asc"
+                  )
+                }
+                className="appearance-none bg-surface-elevated border border-surface-border text-slate-200 text-xs font-medium rounded-lg h-10 pl-3 pr-8 hover:border-slate-500 focus:outline-none focus:border-slate-400 transition-colors cursor-pointer"
+              >
+                <option value="popular">Sort: Most Popular</option>
+                <option value="name-asc">Sort: Name (A–Z)</option>
+                <option value="name-desc">Sort: Name (Z–A)</option>
+                <option value="size-asc">Sort: Smallest Size</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+                <ChevronDown className="w-3.5 h-3.5" />
+              </div>
             </div>
-          </div>
 
-          {/* Reset Filters Button */}
-          {(searchQuery || selectedCategory !== "all" || selectedEngine !== "all") && (
+            {/* Random Game Action */}
             <button
               type="button"
-              data-testid="reset-filters-button"
-              onClick={resetFilters}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white bg-surface-elevated border border-surface-border hover:border-slate-500 transition-colors"
+              onClick={handleRandomGame}
+              className="h-10 px-3.5 bg-surface-elevated hover:bg-slate-800 border border-surface-border text-slate-200 hover:text-white rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+              title="Play a random game"
             >
-              <RotateCcw className="w-3 h-3" />
-              <span>Reset</span>
+              <Shuffle className="w-3.5 h-3.5 text-cyan-400" />
+              <span className="hidden sm:inline">Random</span>
             </button>
-          )}
+
+            {/* Reset Filters Action */}
+            {isFiltered && (
+              <button
+                type="button"
+                data-testid="reset-filters-button"
+                onClick={resetFilters}
+                className="h-10 px-3 bg-surface-elevated hover:bg-red-950/30 border border-surface-border hover:border-red-500/40 text-slate-300 hover:text-red-300 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors"
+                title="Reset all filters"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline">Reset</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Result Count Info */}
-      <div className="text-xs text-slate-400 font-medium flex items-center justify-between">
-        <span data-testid="games-count-summary">
-          Showing <span className="text-slate-100 font-semibold">{filteredGames.length}</span>{" "}
-          of {games.length} games
-        </span>
+      {/* SECTION 2: CATEGORY FILTER TABS & RESULTS COUNT */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1 border-b border-surface-border pb-3">
+        {/* Category Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+          {categories.map((cat) => {
+            const isActive = selectedCategory === cat;
+            const count = getCategoryCount(cat);
+            return (
+              <button
+                key={cat}
+                type="button"
+                data-testid={`category-pill-${cat}`}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  isActive
+                    ? "bg-white text-slate-950 font-semibold shadow-sm"
+                    : "bg-surface-card hover:bg-surface-elevated text-slate-400 hover:text-white border border-surface-border"
+                }`}
+              >
+                <span>{getCategoryLabel(cat)}</span>
+                <span
+                  className={`ml-1.5 text-[10px] font-mono ${
+                    isActive ? "text-slate-800 font-bold" : "text-slate-500"
+                  }`}
+                >
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Live Result Counter */}
+        <div className="text-xs text-slate-400 font-medium shrink-0 flex items-center gap-2">
+          <span data-testid="games-count-summary">
+            Showing <span className="text-white font-semibold">{filteredGames.length}</span>{" "}
+            of {games.length} {games.length === 1 ? "game" : "games"}
+          </span>
+        </div>
       </div>
 
       {/* Games Card Grid */}

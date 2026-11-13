@@ -81,12 +81,6 @@ export default function HomePage() {
             <GitBranch className="w-4 h-4 text-slate-400" />
             <span>Contribute a Game</span>
           </Link>
-
-          {/* Quick Terminal Snippet */}
-          <div className="hidden sm:flex items-center gap-2.5 bg-surface-card border border-surface-border rounded-xl px-3.5 py-2.5 font-mono text-xs text-slate-400">
-            <span className="text-slate-500 select-none">$</span>
-            <span className="text-slate-300">npx opengamehub create my-game</span>
-          </div>
         </div>
 
         {/* Feature Telemetry Chips */}

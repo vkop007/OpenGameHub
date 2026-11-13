@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { Gamepad2, Plus, Search, Star, ExternalLink } from "lucide-react";
+import { Gamepad2, Plus, Search, ExternalLink } from "lucide-react";
 
 export function SiteHeader() {
   const [isHidden, setIsHidden] = useState(false);
@@ -77,7 +77,7 @@ export function SiteHeader() {
               Contribute
             </Link>
             <a
-              href="https://github.com/opengamehub"
+              href="https://github.com/vkop007/OpenGameHub"
               target="_blank"
               rel="noreferrer"
               className="px-3 py-1.5 rounded-lg hover:text-white hover:bg-surface-elevated transition-colors"
@@ -106,18 +106,15 @@ export function SiteHeader() {
             </kbd>
           </Link>
 
-          {/* GitHub Stargazers pill */}
+          {/* GitHub Repository Link */}
           <a
-            href="https://github.com/opengamehub"
+            href="https://github.com/vkop007/OpenGameHub"
             target="_blank"
             rel="noreferrer"
             className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-300 bg-surface-card hover:bg-surface-elevated border border-surface-border rounded-lg transition-colors"
           >
-            <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-            <span>Stars</span>
-            <span className="ml-1 text-[11px] font-mono px-1.5 py-0.2 rounded bg-surface-high text-slate-200 font-semibold">
-              14.8k
-            </span>
+            <span>GitHub</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
           </a>
 
           {/* Submit Game CTA Button */}
@@ -128,11 +125,6 @@ export function SiteHeader() {
             <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
             <span>Submit Game</span>
           </Link>
-
-          {/* User Profile Avatar Pill */}
-          <div className="h-8 w-8 rounded-full border border-surface-border bg-surface-card hover:border-slate-500 flex items-center justify-center font-mono text-[11px] font-bold text-slate-200 transition-colors ml-1 cursor-pointer">
-            OG
-          </div>
         </div>
       </div>
     </header>
@@ -160,7 +152,7 @@ export function SiteFooter() {
             Manifest Schema
           </Link>
           <a
-            href="https://github.com/opengamehub"
+            href="https://github.com/vkop007/OpenGameHub"
             target="_blank"
             rel="noreferrer"
             className="hover:text-slate-300 transition-colors inline-flex items-center gap-1"
