@@ -8,7 +8,8 @@ The recommended workflow is AI-assisted and end to end. Give the prompt below to
 your coding agent from the repository or game-project directory. The agent should
 inspect the project, prepare the game, validate it, launch it, capture a gameplay
 screenshot, and prepare a reviewable pull request without asking you to perform
-routine terminal or Git steps.
+routine terminal or Git steps. If you'd rather not use AI, jump to
+[Manual Contribution (No AI)](#manual-contribution-no-ai).
 
 ## Autonomous AI Contribution Prompt
 
@@ -120,6 +121,47 @@ If GitHub authentication, fork creation, pushing, or PR creation fails, report
 the exact command and error, leave the local work committed and ready, and give
 me only the one next action needed. Do not silently skip a failed step.
 ```
+
+## Manual Contribution (No AI)
+
+Prefer to set things up yourself? Follow these steps instead of using the prompt.
+
+1. **Fork and clone** the repository:
+
+       gh repo fork vkop007/OpenGameHub --clone
+       cd OpenGameHub
+       git checkout -b contribute/<game-slug>
+
+   (Without `gh`: fork on GitHub, then `git clone` your fork.)
+
+2. **Add your game** in `games/<game-slug>/`. The slug must match
+   `^[a-z0-9-]{2,64}$`. Only touch that folder.
+3. **Make it browser-ready** for a nested path:
+   - Use `static` (plain HTML/CSS/JS) or `vite` (`base: "./"`, output to `dist`).
+   - Use relative asset and fetch paths, not root-absolute (`/img.png`).
+   - Don't access `window.parent.document`; guard `localStorage` access.
+   - No `preinstall`/`install`/`postinstall` scripts, symlinks, or custom backends.
+4. **Add `opengamehub.json`** in the game folder (see the manifest example below).
+   Do not add `buildCommand` or custom shell commands.
+5. **Validate and build**:
+
+       pnpm install
+       pnpm game:validate <game-slug>
+       pnpm game:build <game-slug>
+
+6. **Play-test** with `pnpm dev` and open `http://localhost:3000/play/<game-slug>`.
+   Confirm it loads without console errors, starts, responds to controls, and restarts.
+7. **Take a screenshot** of real gameplay and save it as
+   `games/<game-slug>/screenshots/gameplay.png`.
+8. **Commit and push** (never force-push):
+
+       git add games/<game-slug>
+       git commit -m "Add <game title> game"
+       git push -u origin contribute/<game-slug>
+
+9. **Open a pull request** against `vkop007/OpenGameHub` (`gh pr create` or the
+   GitHub UI). Include a summary and controls, the commands you ran, the play URL,
+   the screenshot, and any known limitations.
 
 ## Repository rules
 
