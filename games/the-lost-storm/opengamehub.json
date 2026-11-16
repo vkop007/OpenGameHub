@@ -1,0 +1,24 @@
+{
+  "name": "The Lost Storm",
+  "description": "An isometric action RPG. Wake in a white mist, walk out into a hall under a night storm, and fight what the lightning leaves behind. Find loot, level up and shape your hero on a skill tree of 125 places.",
+  "version": "0.1.0",
+  "author": "marginsystems",
+  "engine": "threejs",
+  "framework": "vanilla",
+  "buildAdapter": "static",
+  "entry": "index.html",
+  "category": "rpg",
+  "thumbnail": "thumbnail.jpg",
+  "tags": ["3d", "rpg", "action-rpg", "isometric", "loot", "threejs"],
+  "controls": [
+    "Left click to move and attack",
+    "Q / W / E / R and right click for skills",
+    "Space to dodge roll",
+    "1-5 to drink flasks",
+    "I inventory, C character, T skill tree",
+    "M world map, Tab minimap",
+    "Hold Alt to show item names",
+    "Esc for the menu"
+  ],
+  "aspectRatio": "16:9"
+}
