@@ -18,7 +18,11 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Cross-Origin-Resource-Policy",
-            value: "same-origin"
+            value: "cross-origin"
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*"
           },
           {
             key: "Cache-Control",
