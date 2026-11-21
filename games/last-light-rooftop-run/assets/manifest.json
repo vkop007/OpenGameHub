@@ -1,0 +1,120 @@
+{
+  "generatedAt": "2026-11-21T12:12:53.874Z",
+  "hdri": {
+    "id": "sunset_jhbcentral",
+    "name": "Joburg Central Sunset",
+    "path": "assets/hdri/sunset_jhbcentral/sunset_jhbcentral_2k.hdr",
+    "source": "https://polyhaven.com/a/sunset_jhbcentral",
+    "license": "CC0"
+  },
+  "textures": {
+    "concrete_roof": {
+      "id": "overgrown_concrete_pavers",
+      "name": "Overgrown Concrete Pavers",
+      "diffuse": "assets/textures/concrete_roof/diffuse.jpg",
+      "normal": "assets/textures/concrete_roof/normal.jpg",
+      "roughness": "assets/textures/concrete_roof/roughness.jpg",
+      "source": "https://polyhaven.com/a/overgrown_concrete_pavers",
+      "license": "CC0"
+    },
+    "asphalt_roof": {
+      "id": "asphalt_02",
+      "name": "Asphalt 02",
+      "diffuse": "assets/textures/asphalt_roof/diffuse.jpg",
+      "normal": "assets/textures/asphalt_roof/normal.jpg",
+      "roughness": "assets/textures/asphalt_roof/roughness.jpg",
+      "source": "https://polyhaven.com/a/asphalt_02",
+      "license": "CC0"
+    },
+    "corrugated_metal": {
+      "id": "corrugated_iron",
+      "name": "Corrugated Iron",
+      "diffuse": "assets/textures/corrugated_metal/diffuse.jpg",
+      "normal": "assets/textures/corrugated_metal/normal.jpg",
+      "roughness": "assets/textures/corrugated_metal/roughness.jpg",
+      "source": "https://polyhaven.com/a/corrugated_iron",
+      "license": "CC0"
+    },
+    "weathered_metal": {
+      "id": "metal_plate",
+      "name": "Metal Plate",
+      "diffuse": "assets/textures/weathered_metal/diffuse.jpg",
+      "normal": "assets/textures/weathered_metal/normal.jpg",
+      "roughness": "assets/textures/weathered_metal/roughness.jpg",
+      "source": "https://polyhaven.com/a/metal_plate",
+      "license": "CC0"
+    },
+    "wood_planks": {
+      "id": "planks_brown_10",
+      "name": "Planks Brown 10",
+      "diffuse": "assets/textures/wood_planks/diffuse.jpg",
+      "normal": "assets/textures/wood_planks/normal.jpg",
+      "roughness": "assets/textures/wood_planks/roughness.jpg",
+      "source": "https://polyhaven.com/a/planks_brown_10",
+      "license": "CC0"
+    },
+    "facade_concrete": {
+      "id": "plaster_grey_04",
+      "name": "Plaster Grey 04",
+      "diffuse": "assets/textures/facade_concrete/diffuse.jpg",
+      "normal": "assets/textures/facade_concrete/normal.jpg",
+      "roughness": "assets/textures/facade_concrete/roughness.jpg",
+      "source": "https://polyhaven.com/a/plaster_grey_04",
+      "license": "CC0"
+    }
+  },
+  "models": {
+    "prop_barrel": {
+      "id": "Barrel_01",
+      "name": "Barrel_01",
+      "path": "assets/models/prop_barrel/Barrel_01_1k.gltf",
+      "source": "https://polyhaven.com/a/Barrel_01",
+      "license": "CC0",
+      "expectedDimensions": {
+        "w": 0.65,
+        "h": 0.92,
+        "d": 0.65
+      },
+      "rotationY": 0
+    },
+    "prop_plant": {
+      "id": "fern_02",
+      "name": "Fern 02",
+      "path": "assets/models/prop_plant/fern_02_1k.gltf",
+      "source": "https://polyhaven.com/a/fern_02",
+      "license": "CC0",
+      "expectedDimensions": {
+        "w": 0.9,
+        "h": 1.25,
+        "d": 0.9
+      },
+      "rotationY": 0
+    },
+    "prop_utility": {
+      "id": "power_box_01",
+      "name": "Power Box 01",
+      "path": "assets/models/prop_utility/power_box_01_1k.gltf",
+      "source": "https://polyhaven.com/a/power_box_01",
+      "license": "CC0",
+      "expectedDimensions": {
+        "w": 0.85,
+        "h": 1.2,
+        "d": 0.5
+      },
+      "rotationY": 0
+    },
+    "prop_barrier": {
+      "id": "modular_chainlink_fence",
+      "name": "Modular Chainlink Fence",
+      "path": "assets/models/prop_barrier/modular_chainlink_fence_1k.gltf",
+      "source": "https://polyhaven.com/a/modular_chainlink_fence",
+      "license": "CC0",
+      "expectedDimensions": {
+        "w": 1.4,
+        "h": 0.95,
+        "d": 0.6
+      },
+      "rotationY": 0
+    }
+  }
+}

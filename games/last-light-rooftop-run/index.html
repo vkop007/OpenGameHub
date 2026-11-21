@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LAST LIGHT — Rooftop Run</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/index-BQozMYvA.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DK4tqX2F.css">
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- File Protocol Guard -->
+      <div id="file-protocol-guard" class="overlay hidden">
+        <div class="guard-content">
+          <h1>Local Server Required</h1>
+          <p>Assets cannot load from <code>file://</code>. Run:</p>
+          <pre>npm run dev</pre>
+          <p>Then open the <code>http://localhost:5173</code> URL.</p>
+        </div>
+      </div>
+
+      <!-- Loading Screen -->
+      <div id="loading-screen" class="overlay">
+        <div class="loading-inner">
+          <div class="brand-kicker">GOLDEN HOUR TIME TRIAL</div>
+          <h1 class="brand-title">LAST LIGHT</h1>
+          <div class="brand-subtitle">ROOFTOP RUN</div>
+          <div class="loading-bar-track">
+            <div id="loading-bar-fill" class="loading-bar-fill"></div>
+          </div>
+          <div id="loading-status" class="loading-status">Initializing engine...</div>
+        </div>
+      </div>
+
+      <!-- Main Menu -->
+      <div id="main-menu" class="overlay menu-overlay hidden">
+        <div class="menu-scrim"></div>
+        <div class="menu-layout">
+          <div class="menu-hero">
+            <div class="brand-kicker">FIRST-PERSON PARKOUR TIME TRIAL</div>
+            <h1 class="brand-title">LAST LIGHT</h1>
+            <div class="brand-subtitle">ROOFTOP RUN</div>
+            <p class="menu-tagline">Reach the spire beacon before the last light disappears.</p>
+            <div id="menu-pb-line" class="menu-pb hidden">
+              PERSONAL BEST <span id="menu-pb-value">--:--.--</span>
+            </div>
+          </div>
+
+          <div class="level-selector" role="tablist" aria-label="Select Course">
+            <button id="btn-level-1" class="level-tab active" data-level="1">
+              <span class="level-code">01</span>
+              <span class="level-name">GOLDEN HOUR</span>
+              <span class="level-diff">STANDARD</span>
+            </button>
+            <button id="btn-level-2" class="level-tab" data-level="2">
+              <span class="level-code">02</span>
+              <span class="level-name">DUSK GAUNTLET</span>
+              <span class="level-diff hard">HARD</span>
+            </button>
+            <button id="btn-level-3" class="level-tab" data-level="3">
+              <span class="level-code">03</span>
+              <span class="level-name">NEON ZENITH</span>
+              <span class="level-diff extreme">EXTREME</span>
+            </button>
+          </div>
+
+          <div class="menu-actions">
+            <button id="btn-start-run" class="btn-primary">START RUN</button>
+            <button id="btn-open-settings" class="btn-ghost">CONTROLS &amp; SETTINGS</button>
+          </div>
+
+          <div class="menu-controls-strip">
+            <span><strong>WASD</strong> Move</span>
+            <span><strong>SHIFT</strong> Sprint</span>
+            <span><strong>SPACE</strong> Jump / Vault / Wall-Kick</span>
+            <span><strong>S / C</strong> Slide / Landing Roll</span>
+            <span><strong>Q</strong> 180° Turn</span>
+            <span><strong>R</strong> Restart</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gameplay HUD -->
+      <div id="hud" class="hud hidden">
+        <div id="hud-danger-vignette" class="hud-danger-vignette"></div>
+        <div class="hud-top">
+          <div class="hud-timer-wrap">
+            <div id="hud-timer" class="hud-timer">00:00.00</div>
+            <div id="hud-timer-state" class="hud-timer-state">MOVE TO START TIMER</div>
+            <div id="hud-split-toast" class="hud-split-toast hidden"></div>
+          </div>
+
+          <div class="hud-right-info">
+            <div class="hud-beacon-dist">
+              <span class="hud-label">BEACON</span>
+              <span id="hud-beacon-meters">240 m</span>
+            </div>
+            <div id="hud-pursuer-dist" class="hud-pursuer-dist hidden">
+              <span class="hud-label danger">PURSUER</span>
+              <span id="hud-pursuer-meters">12 m</span>
+            </div>
+            <div id="hud-checkpoint-indicator" class="hud-checkpoint">CP 0 / 5</div>
+          </div>
+        </div>
+
+        <!-- Subtle Center Reticle -->
+        <div id="hud-reticle" class="hud-reticle"></div>
+
+        <!-- Parkour Action Cue & Prompt -->
+        <div class="hud-bottom">
+          <div id="hud-action-cue" class="hud-action-cue hidden">VAULT</div>
+          <div id="hud-click-resume" class="hud-click-resume hidden">Click to lock mouse &amp; run</div>
+          <div id="hud-zone-name" class="hud-zone-name">ZONE 1 — LAUNCHPAD</div>
+        </div>
+
+        <!-- Optional Stats / Fallback Badges -->
+        <div id="hud-stats" class="hud-stats hidden"></div>
+        <button id="hud-fallback-badge" class="hud-fallback-badge hidden"></button>
+      </div>
+
+      <!-- Pause Menu -->
+      <div id="pause-menu" class="overlay modal-overlay hidden">
+        <div class="modal-scrim"></div>
+        <div class="modal-content">
+          <div class="modal-kicker">PAUSED</div>
+          <h2 class="modal-title">LAST LIGHT</h2>
+          <div class="modal-buttons">
+            <button id="btn-resume" class="btn-primary">RESUME</button>
+            <button id="btn-restart-pause" class="btn-ghost">RESTART RUN</button>
+            <button id="btn-settings-pause" class="btn-ghost">SETTINGS</button>
+            <button id="btn-mainmenu-pause" class="btn-ghost">MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div id="settings-menu" class="overlay modal-overlay hidden">
+        <div class="modal-scrim"></div>
+        <div class="modal-content settings-content">
+          <div class="modal-kicker">PREFERENCES</div>
+          <h2 class="modal-title">CONTROLS &amp; SETTINGS</h2>
+
+          <div class="settings-grid">
+            <label class="setting-row">
+              <span>Mouse Sensitivity</span>
+              <input id="set-sensitivity" type="range" min="0.2" max="2.5" step="0.05" value="1.0" />
+              <span id="val-sensitivity" class="setting-val">1.00</span>
+            </label>
+            <label class="setting-row">
+              <span>Field of View</span>
+              <input id="set-fov" type="range" min="65" max="95" step="1" value="75" />
+              <span id="val-fov" class="setting-val">75°</span>
+            </label>
+            <label class="setting-row">
+              <span>Master Volume</span>
+              <input id="set-master-vol" type="range" min="0" max="1" step="0.05" value="0.8" />
+              <span id="val-master-vol" class="setting-val">80%</span>
+            </label>
+            <label class="setting-row">
+              <span>Music Volume</span>
+              <input id="set-music-vol" type="range" min="0" max="1" step="0.05" value="0.45" />
+              <span id="val-music-vol" class="setting-val">45%</span>
+            </label>
+            <label class="setting-row">
+              <span>SFX &amp; Ambience</span>
+              <input id="set-sfx-vol" type="range" min="0" max="1" step="0.05" value="0.85" />
+              <span id="val-sfx-vol" class="setting-val">85%</span>
+            </label>
+            <label class="setting-row toggle-row">
+              <span>Post-Processing (Bloom &amp; SMAA)</span>
+              <input id="set-postfx" type="checkbox" checked />
+            </label>
+          </div>
+
+          <div class="controls-reference">
+            <div class="controls-ref-title">PARKOUR CONTROLS</div>
+            <div class="controls-ref-grid">
+              <div><strong>WASD + Shift</strong><span>Sprint / Wall-Run along walls</span></div>
+              <div><strong>Space</strong><span>Jump / Vault / Mantle / Wall-Kick</span></div>
+              <div><strong>S / C</strong><span>Slide / Slide-Jump / 360° Landing Roll</span></div>
+              <div><strong>Q</strong><span>180° Quick-Turn</span></div>
+              <div><strong>R</strong><span>Instant Restart</span></div>
+              <div><strong>P / F3 / G / `</strong><span>Post-FX / Stats / Colliders / Debug</span></div>
+            </div>
+          </div>
+
+          <div class="modal-buttons inline-buttons">
+            <button id="btn-close-settings" class="btn-primary">DONE</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finish Screen -->
+      <div id="finish-screen" class="overlay modal-overlay hidden">
+        <div class="modal-scrim finish-scrim"></div>
+        <div class="modal-content finish-content">
+          <div class="modal-kicker">BEACON REACHED</div>
+          <h2 class="finish-heading">RUN COMPLETE</h2>
+          <div id="finish-new-pb" class="finish-pb-badge hidden">NEW PERSONAL BEST</div>
+          <div id="finish-final-time" class="finish-time">00:00.00</div>
+          <div class="finish-meta">
+            <span>PERSONAL BEST <strong id="finish-pb-time">--:--.--</strong></span>
+          </div>
+          <div id="finish-splits" class="finish-splits"></div>
+          <div class="modal-buttons inline-buttons">
+            <button id="btn-next-level" class="btn-primary hidden">NEXT LEVEL</button>
+            <button id="btn-play-again" class="btn-primary">PLAY AGAIN</button>
+            <button id="btn-finish-menu" class="btn-ghost">MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </body>
+</html>
