@@ -1,0 +1,22 @@
+{
+  "name": "LAST LIGHT — Rooftop Run",
+  "description": "Run across hazardous rooftops, parkour through 3 courses, and reach the spire beacon before time runs out.",
+  "version": "1.0.0",
+  "author": "vkop007",
+  "engine": "threejs",
+  "framework": "vanilla",
+  "buildAdapter": "static",
+  "entry": "index.html",
+  "category": "action",
+  "tags": ["3d", "arcade", "parkour", "time-trial", "threejs"],
+  "controls": [
+    "WASD to Move",
+    "Shift to Sprint",
+    "Space to Jump or Vault",
+    "C or S to Slide",
+    "Q to Quick-Turn",
+    "R to Restart",
+    "Mouse to Look"
+  ],
+  "aspectRatio": "16:9"
+}
