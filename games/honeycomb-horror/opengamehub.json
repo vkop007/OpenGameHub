@@ -1,0 +1,27 @@
+{
+  "name": "Honeycomb Horror",
+  "description": "Explore a 41-room honeycomb maze, evade roaming horrors, and find the western exit before the monsters or flooded passages claim you.",
+  "version": "1.0.0",
+  "author": "vkop007",
+  "engine": "threejs",
+  "framework": "vanilla",
+  "buildAdapter": "static",
+  "entry": "index.html",
+  "thumbnail": "thumbnail.png",
+  "category": "action",
+  "tags": ["3d", "horror", "survival", "maze", "threejs"],
+  "controls": [
+    "WASD to move",
+    "Mouse to look",
+    "Shift to sprint",
+    "E or Click to open doors",
+    "F flashlight",
+    "M map",
+    "1-5 change views",
+    "0 play mode",
+    "P toggle post-processing",
+    "` show performance stats",
+    "R restart"
+  ],
+  "aspectRatio": "16:9"
+}

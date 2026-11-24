@@ -1,0 +1,204 @@
+{
+  "generatedAt": "2026-11-23T12:55:00.000Z",
+  "hdri": {
+    "dikhololo_night": {
+      "path": "assets/hdri/dikhololo_night/dikhololo_night_1k.hdr",
+      "source": "https://polyhaven.com/a/dikhololo_night",
+      "license": "CC0",
+      "role": "environment"
+    }
+  },
+  "textures": {
+    "castle_brick_07": {
+      "maps": {
+        "map": "assets/textures/castle_brick_07/castle_brick_07_map.jpg",
+        "normalMap": "assets/textures/castle_brick_07/castle_brick_07_normalMap.jpg",
+        "armMap": "assets/textures/castle_brick_07/castle_brick_07_armMap.jpg",
+        "roughnessMap": "assets/textures/castle_brick_07/castle_brick_07_roughnessMap.jpg"
+      },
+      "repeatMeters": 2.5,
+      "role": "maze_wall",
+      "source": "https://polyhaven.com/a/castle_brick_07",
+      "license": "CC0"
+    },
+    "cobblestone_05": {
+      "maps": {
+        "map": "assets/textures/cobblestone_05/cobblestone_05_map.jpg",
+        "normalMap": "assets/textures/cobblestone_05/cobblestone_05_normalMap.jpg",
+        "armMap": "assets/textures/cobblestone_05/cobblestone_05_armMap.jpg",
+        "roughnessMap": "assets/textures/cobblestone_05/cobblestone_05_roughnessMap.jpg"
+      },
+      "repeatMeters": 3,
+      "role": "maze_floor",
+      "source": "https://polyhaven.com/a/cobblestone_05",
+      "license": "CC0"
+    },
+    "brown_mud_leaves_01": {
+      "maps": {
+        "map": "assets/textures/brown_mud_leaves_01/brown_mud_leaves_01_map.jpg",
+        "normalMap": "assets/textures/brown_mud_leaves_01/brown_mud_leaves_01_normalMap.jpg",
+        "armMap": "assets/textures/brown_mud_leaves_01/brown_mud_leaves_01_armMap.jpg",
+        "roughnessMap": "assets/textures/brown_mud_leaves_01/brown_mud_leaves_01_roughnessMap.jpg"
+      },
+      "repeatMeters": 4,
+      "role": "forest_ground",
+      "source": "https://polyhaven.com/a/brown_mud_leaves_01",
+      "license": "CC0"
+    },
+    "metal_plate": {
+      "maps": {
+        "map": "assets/textures/metal_plate/metal_plate_map.jpg",
+        "normalMap": "assets/textures/metal_plate/metal_plate_normalMap.jpg",
+        "armMap": "assets/textures/metal_plate/metal_plate_armMap.jpg",
+        "roughnessMap": "assets/textures/metal_plate/metal_plate_roughnessMap.jpg"
+      },
+      "repeatMeters": 1.5,
+      "role": "door_metal",
+      "source": "https://polyhaven.com/a/metal_plate",
+      "license": "CC0"
+    }
+  },
+  "models": {
+    "fir_tree_opt": {
+      "path": "assets/models/fir_tree_opt/fir_tree_opt.gltf",
+      "role": "vegetation",
+      "expectedHeight": 9.5,
+      "rotationFix": [0, 0, 0],
+      "source": "https://polyhaven.com/a/fir_sapling_medium",
+      "license": "CC0",
+      "notes": "Optimized game-ready LOD extracted from Poly Haven fir_sapling_medium"
+    },
+    "dead_tree_trunk": {
+      "path": "assets/models/dead_tree_trunk/dead_tree_trunk_1k.gltf",
+      "role": "prop",
+      "expectedHeight": 1.4,
+      "rotationFix": [0, 0, 0],
+      "source": "https://polyhaven.com/a/dead_tree_trunk",
+      "license": "CC0"
+    },
+    "boulder_01": {
+      "path": "assets/models/boulder_01/boulder_01_1k.gltf",
+      "role": "prop",
+      "expectedHeight": 1.6,
+      "rotationFix": [0, 0, 0],
+      "source": "https://polyhaven.com/a/boulder_01",
+      "license": "CC0"
+    },
+    "Lantern_01": {
+      "path": "assets/models/Lantern_01/Lantern_01_1k.gltf",
+      "role": "prop",
+      "expectedHeight": 0.42,
+      "rotationFix": [0, 0, 0],
+      "source": "https://polyhaven.com/a/Lantern_01",
+      "license": "CC0"
+    },
+    "Barrel_01": {
+      "path": "assets/models/Barrel_01/Barrel_01_1k.gltf",
+      "role": "prop",
+      "expectedHeight": 0.92,
+      "rotationFix": [0, 0, 0],
+      "source": "https://polyhaven.com/a/Barrel_01",
+      "license": "CC0"
+    },
+    "crawling_creature": {
+      "path": "assets/models/crawling_creature/crawling_creature.glb",
+      "role": "character",
+      "expectedHeight": 1.15,
+      "rotationFix": [0, 0, 0],
+      "source": "Blender Session (TheCrawlingCreature)",
+      "license": "Custom / Project Asset",
+      "animations": [
+        "01_Idle",
+        "02_Breathing",
+        "03_Head_Looking_Around",
+        "04_Walking_Crawling",
+        "05_Fast_Movement_Chasing",
+        "06_Turning_Around",
+        "07_Searching",
+        "08_Attack",
+        "09_Grab_Kill",
+        "10_Door_Opening"
+      ]
+    },
+    "horror_girl": {
+      "path": "assets/models/horror_girl/horror_girl.glb",
+      "role": "character",
+      "expectedHeight": 1.65,
+      "rotationFix": [0, 0, 0],
+      "source": "Blender Session (HorrorGirl_Character)",
+      "license": "Custom / Project Asset",
+      "animations": [
+        "01_Idle",
+        "02_Breathing",
+        "03_Head_Looking_Around",
+        "04_Walking_Crawling",
+        "05_Fast_Movement_Chasing",
+        "06_Turning_Around",
+        "07_Searching",
+        "08_Attack",
+        "09_Grab_Kill",
+        "10_Door_Opening"
+      ]
+    },
+    "the_butcher": {
+      "path": "assets/models/the_butcher/the_butcher.glb",
+      "role": "character",
+      "expectedHeight": 2.25,
+      "rotationFix": [0, 0, 0],
+      "source": "Blender Session (The_Butcher)",
+      "license": "Custom / Project Asset",
+      "animations": [
+        "01_Idle",
+        "02_Patrol_Walk",
+        "03_Chase_Run",
+        "04_Heavy_Slash",
+        "05_Door_Breach",
+        "06_Searching_LookAround",
+        "07_Grab_Kill",
+        "08_Stun_Stagger"
+      ]
+    },
+    "the_nurse": {
+      "path": "assets/models/the_nurse/the_nurse.glb",
+      "role": "character",
+      "expectedHeight": 1.8,
+      "rotationFix": [0, 0, 0],
+      "source": "Blender Session (The_Nurse_AAA)",
+      "license": "Custom / Project Asset",
+      "animations": [
+        "Nurse_01_Hover_Idle",
+        "Nurse_02_Floating_Glide",
+        "Nurse_03_Blink_Charge",
+        "Nurse_04_Blink_Lunge_Slash",
+        "Nurse_05_Fatigue_Gasp",
+        "Nurse_06_Door_Open",
+        "Nurse_07_Searching_Scan",
+        "Nurse_08_Grab_Kill"
+      ]
+    },
+    "wooden_horror_door": {
+      "path": "assets/models/wooden_horror_door/wooden_horror_door.glb",
+      "role": "door",
+      "expectedHeight": 2.61,
+      "rotationFix": [0, 0, 0],
+      "source": "Blender Session (WoodenHorrorDoor)",
+      "license": "Custom / Project Asset",
+      "animations": [
+        "WoodenHorrorDoor_Opening"
+      ]
+    },
+    "horror_crocodile": {
+      "path": "assets/models/horror_crocodile/horror_crocodile.glb",
+      "role": "creature",
+      "expectedHeight": 0.45,
+      "rotationFix": [0, 0, 0],
+      "source": "Blender Session (HorrorCrocodile)",
+      "license": "Custom / Project Asset",
+      "animations": [
+        "Croc_01_Swim_Patrol",
+        "Croc_02_Swim_Chase",
+        "Croc_03_Bite_Lunge"
+      ]
+    }
+  }
+}

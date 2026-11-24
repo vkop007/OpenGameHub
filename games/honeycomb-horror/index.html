@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Honeycomb — Nighttime Horror Maze</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #04060a; color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      user-select: none;
+    }
+    canvas { position: fixed; inset: 0; z-index: 1; display: block; width: 100vw; height: 100vh; }
+
+    #vignette {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2;
+      background: radial-gradient(circle at center, rgba(0,0,0,0) 48%, rgba(0,0,0,0.72) 100%);
+    }
+    #damage-flash {
+      position: fixed; inset: 0; pointer-events: none; z-index: 9;
+      background: radial-gradient(circle at center, rgba(185,28,28,0.12) 22%, rgba(153,27,27,0.85) 100%);
+      opacity: 0; transition: opacity 0.22s ease-out;
+    }
+    #water-warning {
+      position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 11;
+      background: rgba(127, 29, 29, 0.88); border: 1px solid #f87171;
+      color: #fecaca; border-radius: 8px; padding: 7px 16px;
+      font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      display: none; pointer-events: none;
+    }
+
+    #crosshair {
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: rgba(255,255,255,0.55); box-shadow: 0 0 6px rgba(0,0,0,0.9);
+      pointer-events: none; z-index: 10; transition: transform 0.12s, background 0.12s;
+    }
+    #crosshair.active {
+      transform: translate(-50%, -50%) scale(1.7);
+      background: #4ade80; box-shadow: 0 0 10px rgba(74,222,128,0.8);
+    }
+    #interact-prompt {
+      position: fixed; top: calc(50% + 22px); left: 50%; transform: translateX(-50%);
+      padding: 6px 14px; border-radius: 6px;
+      background: rgba(6, 10, 16, 0.82); border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 13px; letter-spacing: 0.04em; color: #f1f5f9;
+      pointer-events: none; z-index: 10; display: none;
+    }
+
+    #hud {
+      position: fixed; top: 16px; left: 16px; z-index: 10;
+      display: flex; flex-direction: column; gap: 6px;
+      pointer-events: none;
+    }
+    .hud-card {
+      background: rgba(6, 10, 16, 0.72); border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 8px; padding: 10px 14px; backdrop-filter: blur(6px);
+      font-size: 12.5px; line-height: 1.5; max-width: 300px;
+    }
+    .hud-title { font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #f8fafc; }
+    .hud-zone { color: #86efac; font-weight: 600; }
+    .hud-muted { color: #94a3b8; font-size: 11.5px; }
+
+    #controls-hint {
+      position: fixed; bottom: 16px; left: 16px; z-index: 10;
+      background: rgba(6, 10, 16, 0.68); border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 8px; padding: 8px 12px; font-size: 11.5px; color: #cbd5e1;
+      pointer-events: none;
+    }
+    #controls-hint kbd {
+      background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 4px; padding: 1px 5px; font-family: monospace; font-size: 11px; color: #fff;
+    }
+
+    #stats-box {
+      position: fixed; top: 16px; right: 16px; z-index: 10;
+      background: rgba(6, 10, 16, 0.78); border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 8px; padding: 8px 12px; font-family: monospace; font-size: 11.5px;
+      color: #cbd5e1; display: none; pointer-events: none;
+    }
+
+    #fallback-badge {
+      position: fixed; bottom: 16px; right: 16px; z-index: 20;
+      background: rgba(127, 29, 29, 0.9); border: 1px solid #f87171;
+      color: #fee2e2; border-radius: 6px; padding: 6px 10px; font-size: 12px;
+      cursor: pointer; display: none;
+    }
+
+    #minimap-wrap {
+      position: fixed; bottom: 16px; right: 16px; z-index: 12;
+      background: rgba(4, 7, 12, 0.85); border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 10px; padding: 8px; display: none;
+    }
+    #minimap-canvas { display: block; width: 220px; height: 150px; }
+
+    #overlay {
+      position: fixed; inset: 0; z-index: 30;
+      background: radial-gradient(circle at center, rgba(8,14,20,0.78) 0%, rgba(2,4,8,0.94) 100%);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 24px;
+    }
+    .overlay-box {
+      max-width: 500px; background: rgba(10, 15, 24, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 14px;
+      padding: 28px 32px; box-shadow: 0 24px 60px rgba(0,0,0,0.7);
+    }
+    .overlay-box h1 {
+      font-size: 26px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: #f8fafc; margin-bottom: 10px;
+    }
+    .overlay-box p { font-size: 14px; line-height: 1.6; color: #cbd5e1; margin-bottom: 18px; }
+    .btn {
+      display: inline-block; padding: 11px 24px; border-radius: 8px;
+      background: #16a34a; color: #fff; font-weight: 600; font-size: 14px;
+      letter-spacing: 0.04em; border: none; cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn:hover:not(:disabled) { background: #15803d; }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn:disabled { background: #334155; color: #94a3b8; cursor: wait; }
+
+    #file-warning {
+      position: fixed; inset: 0; z-index: 100; background: #090d14;
+      display: none; align-items: center; justify-content: center; text-align: center; padding: 24px;
+    }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="file-warning">
+    <div class="overlay-box">
+      <h1>Local Server Required</h1>
+      <p>Assets cannot load from <code>file://</code>. Run:<br><br>
+      <code>npx serve .</code> (or <code>python3 -m http.server 8091</code>)<br><br>
+      and open the <code>http://localhost</code> URL.</p>
+    </div>
+  </div>
+
+  <div id="vignette"></div>
+  <div id="damage-flash"></div>
+  <div id="water-warning">DEEP WATER — CROCODILES &amp; DROWNING!</div>
+  <div id="crosshair"></div>
+  <div id="interact-prompt">[E] Open Door</div>
+
+  <div id="hud">
+    <div class="hud-card">
+      <div class="hud-title">Honeycomb Maze</div>
+      <div>Zone: <span id="hud-zone" class="hud-zone">Entry Causeway (Forest)</span></div>
+      <div class="hud-muted">Rooms Explored: <span id="hud-rooms">0 / 41</span> &middot; Doors Opened: <span id="hud-doors">0</span></div>
+      <div class="hud-muted">Health: <span id="hud-health">100%</span> &middot; Oxygen: <span id="hud-oxygen">100%</span> &middot; Light: <span id="hud-light">ON</span></div>
+    </div>
+  </div>
+
+  <div id="stats-box"></div>
+  <div id="fallback-badge"></div>
+
+  <div id="minimap-wrap">
+    <canvas id="minimap-canvas" width="220" height="150"></canvas>
+  </div>
+
+  <div id="controls-hint">
+    <kbd>WASD</kbd> Move &middot; <kbd>Shift</kbd> Sprint &middot; <kbd>Mouse</kbd> Look &middot;
+    <kbd>E</kbd>/<kbd>Click</kbd> Open Door &middot; <kbd>F</kbd> Flashlight &middot;
+    <kbd>M</kbd> Map &middot; <kbd>1-5</kbd> Views &middot; <kbd>0</kbd> Play &middot; <kbd>P</kbd> Post-FX &middot; <kbd>`</kbd> Stats &middot; <kbd>R</kbd> Restart
+  </div>
+
+  <div id="overlay">
+    <div class="overlay-box" id="overlay-content">
+      <h1>Honeycomb</h1>
+      <p>You stand on the eastern forest causeway directly facing the lone <strong>Entry Door</strong> of the water-locked honeycomb maze. Every room has <strong>4 functional doors</strong>, but every other outer door opens into deep crocodile-infested water. Find the single western <strong>Exit Door</strong> to escape.</p>
+      <button class="btn" id="start-btn" disabled>Loading dark forest...</button>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js?v=26"></script>
+</body>
+</html>
